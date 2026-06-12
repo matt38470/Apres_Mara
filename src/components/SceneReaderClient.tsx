@@ -2,9 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { NarrativeUnit, Condition } from "@/src/types/narrative";
-import { useGameStore } from "@/src/store/gameStore";
 import { useEffect } from "react";
+import { useGameStore } from "@/src/store/gameStore";
+import type { NarrativeUnit, Condition } from "@/src/types/narrative";
 
 export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
   const router = useRouter();
@@ -16,6 +16,7 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
     addCharacters,
     settings,
     gauges,
+    mentalState,
     setCurrentUnitId,
     chosenPathByUnit,
     setChosenPath,
@@ -35,13 +36,9 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
   }, [scene.id, scene.deskUpdate, addArchives, addCharacters]);
 
   useEffect(() => {
-    setCurrentUnitId(scene.unitNumber);
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, [scene.id, scene.unitNumber, setCurrentUnitId]);
+    setCurrentUnitId(scene.id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [scene.id, setCurrentUnitId]);
 
   const getFontClass = () => {
     switch (settings.fontFamily) {
@@ -59,7 +56,21 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
     if (!conditions || conditions.length === 0) return true;
 
     return conditions.every((cond) => {
-      const current = (gauges as any)[cond.key];
+      let current: unknown;
+
+      if (cond.key === "mentalState") {
+        current = mentalState;
+      } else if (
+        cond.key === "dette" ||
+        cond.key === "ancrage" ||
+        cond.key === "humanite"
+      ) {
+        current = gauges[cond.key];
+      } else if (cond.key === "archives") {
+        current = [];
+      } else {
+        return true;
+      }
 
       switch (cond.operator) {
         case "eq":
@@ -67,13 +78,11 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
         case "neq":
           return current !== cond.value;
         case "gte": {
-          const target =
-            typeof cond.value === "number" ? cond.value : Number(cond.value);
+          const target = typeof cond.value === "number" ? cond.value : Number(cond.value);
           return typeof current === "number" && current >= target;
         }
         case "lte": {
-          const target =
-            typeof cond.value === "number" ? cond.value : Number(cond.value);
+          const target = typeof cond.value === "number" ? cond.value : Number(cond.value);
           return typeof current === "number" && current <= target;
         }
         case "includes":
@@ -84,15 +93,16 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
     });
   };
 
-  const resolveNextUnitUrl = (nextUnitId: string) => {
-    if (nextUnitId.startsWith("ch1-u")) {
-      const numPart = nextUnitId.split("-u")[1];
-      const num = parseInt(numPart, 10);
-      return `/read/${scene.chapterNumber}/1.${num}`;
-    }
+const resolveNextUnitUrl = (nextUnitId: string) => {
+  if (nextUnitId.startsWith("ch1-u")) {
+    const numPart = nextUnitId.split("-u")[1];
+    const num = parseInt(numPart, 10);
+    return `/read/1/1.${num}`;
+  }
 
-    return `/read/${scene.chapterNumber}/${nextUnitId}`;
-  };
+  const nextChapterNumber = nextUnitId.split(".")[0];
+  return `/read/${nextChapterNumber}/${nextUnitId}`;
+};
 
   return (
     <AnimatePresence mode="wait">
@@ -157,7 +167,7 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
 
                   if (sceneAlreadyResolved) {
                     if (alreadyChosen) {
-                      router.replace(resolveNextUnitUrl(choice.nextUnitId));
+                      router.push(resolveNextUnitUrl(choice.nextUnitId));
                     }
                     return;
                   }
@@ -166,13 +176,11 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
                   setChosenPath(scene.id, choice.id);
 
                   const state = useGameStore.getState();
-
                   const hasGaugeChange =
                     !!choice.effects &&
                     Object.values(choice.effects).some(
                       (value) => typeof value === "number" && value !== 0
                     );
-
                   const hasArchiveUnlock = !!choice.unlockArchive;
 
                   if (hasGaugeChange || hasArchiveUnlock) {
@@ -194,7 +202,9 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
                     });
                   }
 
-                  router.replace(resolveNextUnitUrl(choice.nextUnitId));
+                  setTimeout(() => {
+                    router.push(resolveNextUnitUrl(choice.nextUnitId));
+                  }, hasGaugeChange || hasArchiveUnlock ? 800 : 0);
                 }}
                 className={`w-full rounded-2xl border p-4 text-left transition-all duration-300 ${
                   alreadyChosen

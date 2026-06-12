@@ -4,20 +4,18 @@ import type { GaugeEffects } from "@/src/types/narrative";
 import { getMentalStateConfig } from "@/mentalStateConfig";
 
 export interface GaugeState {
-  alerte: number;
-  charge: number;
-  integrite: number;
-  preparation: number;
-  cohesion: number;
-  discretion: number;
+  dette: number;      // ex: commence à 80 (forte pression)
+  ancrage: number;    // ex: commence à 100 (esprit sain)
+  humanite: number;   // ex: 50 (neutre)
 }
 
 export type MentalState =
+  | "lucide"
+  | "tourmente"
+  | "visionnaire"
+  | "pression"
+  | "fracture"
   | "stable"
-  | "isolement"
-  | "paranoia"
-  | "fatigue"
-  | "pression";
 
 export interface ChoiceHistoryEntry {
   choiceId: string;
@@ -69,12 +67,9 @@ export interface GameState {
 }
 
 const initialGauges: GaugeState = {
-  alerte: 10,
-  charge: 50,
-  integrite: 80,
-  preparation: 20,
-  cohesion: 60,
-  discretion: 40,
+  dette: 80,
+  ancrage: 100,
+  humanite: 50,
 };
 
 const initialArchives: string[] = [];
@@ -88,26 +83,27 @@ function clampGauge(value: number) {
 }
 
 function computeMentalState(gauges: GaugeState): MentalState {
-  const { alerte, charge, integrite, preparation, discretion, cohesion } = gauges;
+  const { ancrage } = gauges;
 
-  if (charge >= 75 || (charge >= 65 && preparation <= 35)) {
-    return "fatigue";
+  
+  if (ancrage < 10 ) {
+    return "visionnaire";
   }
 
-  if (alerte >= 75 && integrite <= 45) {
-    return "paranoia";
+  if (ancrage < 30 ) {
+    return "visionnaire";
   }
 
-  if (charge >= 65 && alerte >= 60) {
-    return "pression";
+  if (ancrage < 50 ) {
+    return "tourmente";
   }
 
-  if (cohesion <= 35 && discretion >= 65) {
-    return "isolement";
+  if (ancrage <= 80 ) {
+    return "stable";
   }
 
-  return "stable";
-}
+  return "lucide";
+  };
 
 function getQuickNoteFromMentalState(state: MentalState): string {
   return getMentalStateConfig(state).quickNote;
@@ -162,12 +158,9 @@ export const useGameStore = create<GameState>()(
             : state.madeChoices;
 
           const nextGauges: GaugeState = {
-            alerte: clampGauge(state.gauges.alerte + (effects?.alerte || 0)),
-            charge: clampGauge(state.gauges.charge + (effects?.charge || 0)),
-            integrite: clampGauge(state.gauges.integrite + (effects?.integrite || 0)),
-            preparation: clampGauge(state.gauges.preparation + (effects?.preparation || 0)),
-            cohesion: clampGauge(state.gauges.cohesion + (effects?.cohesion || 0)),
-            discretion: clampGauge(state.gauges.discretion + (effects?.discretion || 0)),
+            dette: clampGauge(state.gauges.dette + (effects?.dette || 0)),
+            ancrage: clampGauge(state.gauges.ancrage + (effects?.ancrage || 0)),
+            humanite: clampGauge(state.gauges.humanite + (effects?.humanite || 0)),
           };
 
           const nextMentalState = computeMentalState(nextGauges);

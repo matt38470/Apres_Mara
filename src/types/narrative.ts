@@ -1,20 +1,14 @@
 import type { AccessLevel, EntitlementKey } from "./access";
 
 export type GaugeKey =
-  | "alerte"
-  | "charge"
-  | "integrite"
-  | "preparation"
-  | "cohesion"
-  | "discretion";
+  | "dette"       // Remplace "alerte/charge" (Ressource externe)
+  | "ancrage"     // Remplace "integrite/cohesion" (Santé mentale)
+  | "humanite";   // Remplace "preparation/discretion" (Polarité morale : Cynisme vs Empathie)
 
 export interface GaugeEffects {
-  alerte?: number;
-  charge?: number;
-  integrite?: number;
-  preparation?: number;
-  discretion?: number;
-  cohesion?: number;
+  dette?: number;
+  ancrage?: number;
+  humanite?: number;
 }
 
 export type StateEffect = {
@@ -22,7 +16,7 @@ export type StateEffect = {
   delta: number;
 };
 
-export type ConditionKey = GaugeKey | "mentalState";
+export type ConditionKey = GaugeKey | "mentalState" | "archives";
 
 export type Condition = {
   key: ConditionKey;

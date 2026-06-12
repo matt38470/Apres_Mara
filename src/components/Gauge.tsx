@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 import { useGameStore } from "@/src/store/gameStore";
 
 interface GaugeProps {
-  idKey: "alerte" | "charge" | "integrite" | "preparation" | "discretion" | "cohesion";
+  idKey: "dette" | "ancrage" | "humanite";
   label: string;
   value: number;
-  colorTheme: "red" | "orange" | "blue" | "green" | "purple" | "teal";
+  colorTheme: "red" | "orange" | "green";
   description: string;
 }
 
@@ -25,7 +25,7 @@ export default function Gauge({
 
   useEffect(() => {
     if (lastEffects && lastEffects[idKey] !== undefined) {
-      setImpactValue(lastEffects[idKey]!);
+      setImpactValue(lastEffects[idKey] ?? null);
       setShowFeedback(true);
 
       const timer = setTimeout(() => {
@@ -38,34 +38,19 @@ export default function Gauge({
 
   const colorMap = {
     red: {
-      bar: "bg-red-500",
-      text: "text-red-600 dark:text-red-400",
-      ring: "ring-red-500/30",
-    },
-    orange: {
-      bar: "bg-orange-500",
-      text: "text-orange-600 dark:text-orange-400",
-      ring: "ring-orange-500/30",
-    },
-    blue: {
-      bar: "bg-blue-500",
-      text: "text-blue-600 dark:text-blue-400",
-      ring: "ring-blue-500/30",
+      bar: "bg-[#9e2a2b] dark:bg-[#dc2f02]",
+      text: "text-[#9e2a2b] dark:text-[#dc2f02]",
+      ring: "ring-[#9e2a2b]/30",
     },
     green: {
-      bar: "bg-green-500",
-      text: "text-green-600 dark:text-green-400",
-      ring: "ring-green-500/30",
+      bar: "bg-[#283618] dark:bg-[#606c38]",
+      text: "text-[#283618] dark:text-[#606c38]",
+      ring: "ring-[#283618]/30",
     },
-    purple: {
-      bar: "bg-purple-500",
-      text: "text-purple-600 dark:text-purple-400",
-      ring: "ring-purple-500/30",
-    },
-    teal: {
-      bar: "bg-teal-500",
-      text: "text-teal-600 dark:text-teal-400",
-      ring: "ring-teal-500/30",
+    orange: {
+      bar: "bg-[#e09f3e] dark:bg-[#ffba08]",
+      text: "text-[#e09f3e] dark:text-[#ffba08]",
+      ring: "ring-[#e09f3e]/30",
     },
   };
 

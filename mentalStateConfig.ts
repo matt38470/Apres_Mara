@@ -12,53 +12,57 @@ export type MentalStateConfig = {
   narrativeCue: string;
 };
 
+// IMPORTANT : Les clés ici DOIVENT correspondre exactement 
+// au type MentalState ("lucide", "stable", "tourmente", "visionnaire", "fracture")
 export const MENTAL_STATE_CONFIG: Record<MentalState, MentalStateConfig> = {
+  lucide: {
+    label: "Lucide",
+    quickNote: "Esprit clair : détachement émotionnel maintenu.",
+    journalTone: "lucid",
+    statusLabel: "Impassible",
+    blockedChoiceThemes: [],
+    narrativeCue: "Vance analyse la situation avec la froideur d'un professionnel habitué à la mort.",
+  },
+
   stable: {
     label: "Stable",
-    quickNote: "État stable : capacité de discernement préservée.",
-    journalTone: "lucid",
-    statusLabel: "Lucide",
+    quickNote: "État contrôlé : la fatigue se fait sentir mais la raison domine.",
+    journalTone: "lucid", // Ou "focused" selon vos préférences
+    statusLabel: "Concentré",
     blockedChoiceThemes: [],
-    narrativeCue: "Thomas conserve une lecture claire des faits et de leurs implications.",
+    narrativeCue: "Malgré l'urgence, Vance parvient à garder les idées claires.",
   },
 
-  fatigue: {
-    label: "Fatigue",
-    quickNote: "Charge mentale élevée : risque de décisions impulsives.",
+  tourmente: {
+    label: "Tourmenté",
+    quickNote: "Faille émotionnelle : les souvenirs d'Anna parasitent l'enquête.",
     journalTone: "anxious",
-    statusLabel: "Fatigué",
-    blockedChoiceThemes: ["patience", "analyse longue", "temporisation"],
-    narrativeCue: "Les pensées se contractent, l’effort d’analyse devient plus coûteux.",
+    statusLabel: "À vif",
+    blockedChoiceThemes: ["froideur", "détachement clinique", "cynisme absolu"],
+    narrativeCue: "La frontière entre le travail et la douleur personnelle commence à s'estomper.",
   },
 
-  pression: {
-    label: "Pression",
-    quickNote: "Pression critique : difficulté à temporiser.",
-    journalTone: "focused",
-    statusLabel: "Sous pression",
-    blockedChoiceThemes: ["attente", "négociation lente", "prise de recul"],
-    narrativeCue: "L’urgence prend le dessus et pousse Thomas à agir avant de tout relier.",
+  visionnaire: {
+    label: "Visionnaire",
+    quickNote: "Décrochage du réel : perceptions accrues, rationalité compromise.",
+    journalTone: "focused", // Ou un nouveau ton si vous le créez, ex: "feverish"
+    statusLabel: "Halluciné",
+    blockedChoiceThemes: ["logique pure", "diplomatie standard"],
+    narrativeCue: "Les murs de San Telmo semblent respirer. Vance perçoit les échos des âmes plutôt que la réalité matérielle.",
   },
 
-  paranoia: {
-    label: "Paranoïa",
-    quickNote: "Hypervigilance accrue : tendance à surinterpréter les signaux.",
-    journalTone: "anxious",
-    statusLabel: "Hypervigilant",
-    blockedChoiceThemes: ["confiance", "transparence", "coopération ouverte"],
-    narrativeCue: "Chaque détail paraît chargé d’intention, même lorsqu’il ne l’est pas forcément.",
-  },
-
-  isolement: {
-    label: "Isolement",
-    quickNote: "Repli relationnel : demander de l’aide devient plus difficile.",
+  fracture: {
+    label: "Fracture",
+    quickNote: "Effondrement mental : perte totale des repères.",
     journalTone: "cold",
-    statusLabel: "En retrait",
-    blockedChoiceThemes: ["alliance", "appel à l’aide", "coordination"],
-    narrativeCue: "Thomas se retire peu à peu du lien aux autres et se replie sur ses propres arbitrages.",
+    statusLabel: "Brisé",
+    blockedChoiceThemes: ["négociation", "raisonnement", "empathie"],
+    narrativeCue: "Vance ne voit plus qu'un monde de cadavres vides et d'âmes hurlantes.",
   },
 };
 
 export function getMentalStateConfig(state: MentalState): MentalStateConfig {
-  return MENTAL_STATE_CONFIG[state];
+  // Sécurité supplémentaire : si l'état n'existe pas, on renvoie "stable" par défaut
+  // Cela évitera les plantages d'écran blanc à l'avenir !
+  return MENTAL_STATE_CONFIG[state] || MENTAL_STATE_CONFIG["stable"];
 }

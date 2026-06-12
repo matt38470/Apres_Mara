@@ -1,24 +1,30 @@
-# Dépendances (Le plus lourd, généré par npm install)
+# Dépendances
 node_modules/
 
-# Dossiers de build Next.js (Générés automatiquement à chaque lancement)
+# Build / cache
 .next/
 out/
 build/
+.vercel/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
 
-# Fichiers de variables d'environnement (Sécurité : mots de passe, clés API)
+# Variables d'environnement
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Fichiers de log et de debug
+# Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Fichiers système (Mac/Windows)
+# Système
 .DS_Store
 Thumbs.db
+Desktop.ini

@@ -2,596 +2,270 @@ import type { NarrativeUnit } from '@/src/types/narrative';
 
 export const scene2: NarrativeUnit[] = [
   {
-    id: "ch1-s02-u01",
+    id: "1.2.1a",
     chapterId: "chapter-1",
     chapterNumber: 1,
-    unitNumber: "1.2.1",
-    title: "LA ROTONDE",
-    location: "Bar",
-    timeLabel: "18:58",
-    imagePrompt: "scene_thomas_Bar",
-    accessLevel: "public",
-    countdownVisible: false,
+    unitNumber: "1.2.1a",
+    title: "PLUIE D'ESCORTE",
+    location: "Descente vers le Quartier Sud",
+    timeLabel: "23:18",
+    accessLevel: "free",
     textBlocks: [
-      "Dans le métro, Thomas ne pense plus aux chiffres.",
-      "Il pense à la décision qu’il est en train de prendre — pas demain, pas la semaine prochaine, maintenant, ce soir, en marchant vers un bar dont il sait déjà qu’il sera le lieu d’une conversation plus importante que n’importe quelle réunion de sa carrière.",
-      "Il arrive à 18h58.",
-      "La Rotonde est à six minutes de la sortie, à l’angle de la rue. Une façade rouge sombre. Une lumière jaune qui rend tout le monde légèrement plus vieux.",
-      "Il prend une table au fond, dos au mur, avec vue sur l’entrée. Une table d’homme qui attend quelque chose qu’il ne peut déjà plus décommander.",
-      "Il commande un café. Il ne le boira pas.",
-      "Son téléphone repose sur la table, écran éteint, face contre le bois.",
-      "Il connaît déjà le fichier à l’intérieur. Il connaît les chiffres.",
-      "Ce qu’il attend maintenant n’est plus une donnée supplémentaire, mais un second regard.",
-      "Samir entre à 19h07.",
-      "Manteau sombre, sac d’ordinateur en bandoulière, l’air de quelqu’un qui a marché vite sans courir.",
-      "Il repère Thomas immédiatement, lève deux doigts dans sa direction et vient s’asseoir en face de lui.",
-      "— Qu’est-ce qu’il y a ?",
-      "La courbe est là, dans le téléphone de Thomas, dans sa tête.",
-      "Jusqu’à présent, il est le seul à porter le poids de cette découverte.",
-      "Une fois l’information prononcée à voix haute, elle échappera à son contrôle."
+      "La voiture de la milice glissait dans la nuit avec la discrétion d’un requin gras. À travers la vitre, San Telmo se défaisait par couches : les façades nettes de la Canopée, les hôtels où les fortunes vieillissantes rachetaient de la peau fraîche, puis les quartiers suspendus où les enseignes perdaient des lettres avant de perdre leur lumière.",
+      "Valerius conduisait d’une seule main. L’autre reposait sur le volant avec cette décontraction étudiée des hommes qui n’ont jamais dû courir pour sauver quoi que ce soit. L’habitacle sentait le cuir humide, le tabac blond et le métal huilé des armes entretenues par d’autres.",
+      "— Les Sterling veulent leur vieille avant l’aube, a-t-il dit.",
+      "— Touchante définition de la famille.",
+      "Il a eu un sourire mince. Dehors, la pluie frappait le pare-brise comme des ongles pressés.",
+      "Plus on descendait, plus la ville perdait ses bonnes manières. Les murs se lézardaient, les vitrines se protégeaient derrière des grilles, et les trottoirs apprenaient à disparaître sous l’eau sale. Au loin, les docks levaient déjà leurs silhouettes de grues maigres et de hangars pourris. Les anciens abattoirs attendaient au bout du quartier, là où San Telmo cachait ce qu’elle n’avait pas le courage de jeter à la mer."
     ],
-    deskUpdate: {
-      systemNotes: [
-        "Rendez-vous initié hors du bureau.",
-        "Le sujet quitte l’isolement de la découverte.",
-        "Un second regard est désormais possible.",
-        "Samir devient le premier témoin technique.",
-        "L’information reste contenue, mais plus seule."
-      ],
-      journalEntry: {
-        summary: "Thomas rejoint Samir à La Rotonde pour confronter la dérive repérée dans les données et sortir du face-à-face solitaire avec l’anomalie.",
-        tone: "lucid",
-        tags: ["rendez-vous", "Samir", "bar", "premier partage", "décision"]
-      },
-      unlockArchives: ["samirdossier"],
-      unlockCharacters: [
-        {
-          id: "samir",
-          note: "Relais technique mobilisé pour la première fois hors du bureau."
-        }
-      ]
-    },
     choices: [
       {
-        id: "scene2-a1",
-        label: "La transparence absolue",
-        hint: "Tout dire à Samir.",
-        nextUnitId: "1.2.2",
-        effects: { alerte: 15, discretion: -15 }
+        id: "c2a_push_valerius",
+        label: "Le pousser à parler de la rançon.",
+        hint: "Chercher ce qu’il cache.",
+        nextUnitId: "1.2.2a",
+        effects: {
+          humanite: -2
+        },
+        journalNote: "J’ai choisi de tirer Valerius sur le terrain de l’argent."
       },
       {
-        id: "scene2-a2",
-        label: "L’alerte mesurée",
-        hint: "Dire l’essentiel sans tout dévoiler.",
-        nextUnitId: "1.2.5",
-        effects: { preparation: 10, confiance_samir: 10 }
-      },
-      {
-        id: "scene2-a3",
-        label: "L’esquive calculée",
-        hint: "Rester vague et garder la main.",
-        nextUnitId: "1.2.7",
-        effects: { discretion: 10, confiance_samir: -10 }
-      },
-      {
-        id: "scene2-a4",
-        label: "Le repli",
-        hint: "Minimiser l’anomalie pour gagner du temps.",
-        nextUnitId: "1.2.9",
-        effects: { discretion: 15, alerte: -10 }
+        id: "c2a_silence",
+        label: "Me taire et observer.",
+        hint: "Rester en retrait.",
+        nextUnitId: "1.2.2b",
+        effects: {
+          ancrage: 2
+        },
+        journalNote: "J’ai préféré garder le silence et regarder la ville tomber."
       }
     ]
   },
 
   {
-    id: "ch1-s02-u02",
+    id: "1.2.1b",
     chapterId: "chapter-1",
     chapterNumber: 1,
-    unitNumber: "1.2.2",
-    title: "LA ROTONDE",
-    location: "Bar",
-    timeLabel: "19:07",
-    imagePrompt: "Thomas_Samir_Bar",
-    accessLevel: "public",
-    countdownVisible: false,
+    unitNumber: "1.2.1b",
+    title: "SEUL SOUS L’ORAGE",
+    location: "Descente vers le Quartier Sud",
+    timeLabel: "23:18",
+    accessLevel: "free",
     textBlocks: [
-      "Thomas sort son carnet. Pas son téléphone. Pas les captures. D’abord la forme.",
-      "Il trace un axe horizontal, un axe vertical, puis la ligne.",
-      "Presque plate au début.",
-      "Puis cette dérive lente, continue, assez faible pour rester défendable, assez régulière pour ne plus pouvoir être traitée comme un accident.",
-      "Samir regarde sans parler.",
-      "— Secteur nord-est, dit Thomas. Dix-huit mois. Dans la marge si tu prends le chiffre seul. Pas si tu regardes la pente.",
-      "Thomas sent que, maintenant qu’il a commencé, s’arrêter au milieu reviendrait à mentir plus maladroitement qu’un silence.",
-      "Il détaille les recoupements, les charges saisonnières, la maintenance.",
-      "Il avoue que le problème ne s’arrête pas au nœud NW-7.",
-      "Il évoque l’impensable : une logique de propagation.",
-      "Une cascade.",
-      "Le silence entre eux n’est pas un silence vide.",
-      "C’est celui de deux hommes en train de mesurer la même chose à partir de deux seuils différents.",
-      "Samir prend sa tasse, boit une gorgée, la repose.",
-      "— J’ai vu quelque chose, dit-il. Pas par la même entrée. Sur des reports de charge. Je l’ai laissé de côté parce que ça restait absorbable. Puis c’est revenu hier dans une projection plus large."
+      "L’ascenseur m’a recraché dans un hall de marbre, puis dans une rue propre, puis dans une ville qui se salissait à mesure que je lui rendais sa vraie hauteur. J’ai pris un taxi jusqu’à la dernière station sûre. Après, j’ai fini à pied. À San Telmo, il y a toujours un moment où les voitures refusent d’aller plus loin que la peur de leur chauffeur.",
+      "La pluie me collait la chemise au dos. Les néons bavaient sur les flaques. Chaque coin de rue sentait le sel, l’huile brûlée, le sucre fermenté et la fatigue humaine. Le Quartier Sud commençait là où les fenêtres devenaient étroites et où les chiens savaient faire la différence entre un homme perdu et un homme armé.",
+      "Je repensais au vieux poste à lampes des Sterling. À sa chaleur sale. À cette femme riche réduite à trembler dans une boîte bonne pour la casse. En haut, on appelle ça une tragédie. En bas, c’est juste mardi.",
+      "Les anciens abattoirs se dessinaient déjà dans la brume : murs longs, toitures basses, cheminées mortes. Des bâtiments conçus pour vider les bêtes de leur sang, puis reconvertis pour en vider autre chose. La ville change les usages avant de changer de conscience.",
+      "J’ai ralenti à l’angle d’une rue noyée. Quelqu’un pouvait m’observer. Dans ce quartier, même les flaques ont l’air d’attendre leur heure."
     ],
-    deskUpdate: {
-      systemNotes: [
-        "La dérive est nommée ouvertement.",
-        "La logique de propagation devient envisageable.",
-        "Samir confirme un signal convergent.",
-        "Le problème dépasse NW-7.",
-        "La scène franchit le seuil de la lecture individuelle."
-      ],
-      journalEntry: {
-        summary: "Thomas montre la pente à Samir et obtient en retour une première confirmation technique issue d’une autre entrée.",
-        tone: "cold",
-        tags: ["NW-7", "pente", "cascade", "convergence", "confirmation"]
-      },
-      unlockArchives: ["nw7_dossier", "reports_charge"],
-      unlockCharacters: [
-        {
-          id: "samir",
-          note: "Le diagnostic devient partagé."
-        }
-      ]
-    },
     choices: [
       {
-        id: "scene2-a1-continue",
-        label: "Poursuivre l’échange",
-        hint: "Mesurer la fenêtre de tir et la suite à donner.",
+        id: "c2b_main_street",
+        label: "Passer par la rue principale.",
+        hint: "Plus rapide, plus exposé.",
+        nextUnitId: "1.2.2c",
+        effects: {
+          ancrage: -2
+        },
+        journalNote: "J’ai choisi la voie directe vers les anciens abattoirs."
+      },
+      {
+        id: "c2b_back_alleys",
+        label: "Contourner par les venelles.",
+        hint: "Plus lent, plus discret.",
+        nextUnitId: "1.2.2d",
+        effects: {
+          humanite: 2
+        },
+        journalNote: "J’ai préféré les détours sombres pour approcher sans bruit."
+      }
+    ]
+  },
+
+  {
+    id: "1.2.2a",
+    chapterId: "chapter-1",
+    chapterNumber: 1,
+    unitNumber: "1.2.2a",
+    title: "L’ODEUR DE L’ARGENT",
+    location: "Voiture de la milice",
+    timeLabel: "23:22",
+    accessLevel: "free",
+    textBlocks: [
+      "— Combien ? ai-je demandé.",
+      "Valerius n’a pas tourné la tête.",
+      "— Pardon ?",
+      "— La rançon. Tu n’as pas l’air d’un homme qui se déplace pour la beauté du geste.",
+      "Il a ri. Un son bref, sans joie.",
+      "— Les Sterling paient assez pour faire oublier des noms, a-t-il dit. Et assez peu pour qu’on ait encore envie d’en vendre d’autres.",
+      "Je n’ai rien répondu. C’était presque élégant, comme aveu. Dans cette ville, les hommes honnêtes ne survivent que lorsqu’ils n’ont plus rien à protéger. Les autres négocient."
+    ],
+    choices: [
+      {
+        id: "c2a_merge",
+        label: "Continuer vers les anciens abattoirs.",
         nextUnitId: "1.2.3"
       }
     ]
   },
 
   {
-    id: "ch1-s02-u03",
+    id: "1.2.2b",
+    chapterId: "chapter-1",
+    chapterNumber: 1,
+    unitNumber: "1.2.2b",
+    title: "MÂCHOIRES FERMÉES",
+    location: "Voiture de la milice",
+    timeLabel: "23:22",
+    accessLevel: "free",
+    textBlocks: [
+      "Je me suis tu. J’ai regardé la ville se défaire derrière la vitre et j’ai mémorisé les sorties, les coupures de lumière, les rues où l’eau s’accumulait trop vite. On apprend ce genre de choses quand on a longtemps vécu avec l’idée qu’un trajet retour n’est jamais garanti.",
+      "Valerius a fini par parler de lui-même, incapable de supporter trop longtemps un silence qui ne lui appartenait pas.",
+      "— Tu sais ce que je déteste chez les riches, Vance ?",
+      "— Leur respiration ?",
+      "— Leur surprise. Chaque fois qu’on les vole, ils ont l’air de découvrir que l’argent rend visible.",
+      "J’ai laissé la phrase tomber entre nous. La pluie faisait le reste."
+    ],
+    choices: [
+      {
+        id: "c2b_merge",
+        label: "Arriver aux abattoirs.",
+        nextUnitId: "1.2.3"
+      }
+    ]
+  },
+
+  {
+    id: "1.2.2c",
+    chapterId: "chapter-1",
+    chapterNumber: 1,
+    unitNumber: "1.2.2c",
+    title: "LA VOIE COURTE",
+    location: "Quartier Sud",
+    timeLabel: "23:22",
+    accessLevel: "free",
+    textBlocks: [
+      "J’ai pris la rue principale. Mauvaise habitude, peut-être. Ou bonne vieille lassitude. Quand on est fatigué, on négocie parfois avec le danger comme avec un barman qu’on connaît trop bien.",
+      "Des silhouettes fumaient sous des auvents tordus. Une femme a baissé les yeux en me voyant passer. Deux gamins ont disparu dans une venelle avec la vitesse de petits animaux élevés au bruit des bottes. Personne n’avait envie de parler à un homme qui marchait seul, trempé, et gardait une main trop près de sa veste.",
+      "Au fond, les anciens abattoirs dressaient leurs murs noirs. Les fenêtres murées ressemblaient à des orbites crevées. La pluie y glissait comme sur une peau morte."
+    ],
+    choices: [
+      {
+        id: "c2c_merge",
+        label: "Approcher du bâtiment principal.",
+        nextUnitId: "1.2.3"
+      }
+    ]
+  },
+
+  {
+    id: "1.2.2d",
+    chapterId: "chapter-1",
+    chapterNumber: 1,
+    unitNumber: "1.2.2d",
+    title: "LES DÉTOURS",
+    location: "Arrière-cours du Quartier Sud",
+    timeLabel: "23:22",
+    accessLevel: "free",
+    textBlocks: [
+      "J’ai coupé par les venelles, les arrière-cours, les passages étroits où la ville garde ses os à découvert. L’eau me montait parfois jusqu’à la cheville. Des linges sales battaient au vent entre les murs. Quelqu’un pleurait derrière une porte sans serrure.",
+      "À cette hauteur de San Telmo, les gens n’attendent plus qu’on les sauve. Ils attendent seulement qu’on passe son chemin.",
+      "J’ai longé un mur couvert d’anciennes affiches de loterie, traversé une cour où rouillaient trois scooters éventrés, puis gagné l’arrière des abattoirs. De là, le bâtiment semblait encore plus vaste, plus aveugle, plus décidé à ne rien rendre de ce qu’on y entrait."
+    ],
+    choices: [
+      {
+        id: "c2d_merge",
+        label: "Trouver une entrée.",
+        nextUnitId: "1.2.3"
+      }
+    ]
+  },
+
+  {
+    id: "1.2.3",
     chapterId: "chapter-1",
     chapterNumber: 1,
     unitNumber: "1.2.3",
-    title: "LA ROTONDE",
-    location: "Bar",
-    timeLabel: "19:14",
-    imagePrompt: "Thomas_Samir_Bar_Tension",
-    accessLevel: "public",
-    countdownVisible: false,
+    title: "LES ANCIENS ABATTOIRS",
+    location: "Anciens abattoirs du Quartier Sud",
+    timeLabel: "23:29",
+    accessLevel: "free",
     textBlocks: [
-      "Quelque chose se resserre proprement en Thomas.",
-      "Pas de panique. Plutôt la disparition de la dernière issue commode.",
-      "— Tu as une fenêtre ? demande-t-il.",
-      "Samir hésite à peine.",
-      "— Si je reste prudent, entre quatre et six mois. Moins si j’arrête de l’être.",
-      "Thomas regarde la feuille entre eux, la pente tracée au stylo sur un papier de bar, et il comprend que ce n’est plus la même scène qu’il y a cinq minutes.",
-      "Avant son arrivée, il pouvait encore imaginer une erreur de lecture.",
-      "Maintenant ils sont deux.",
-      "— Tu as gardé tes fichiers ? demande Thomas.",
-      "— En local, dit Samir. Pas sur le partagé.",
-      "Thomas hoche la tête.",
-      "— Moi aussi.",
-      "Cette réponse suffit.",
-      "Elle dit plus que le reste.",
-      "Elle dit qu’ils ont eu le même réflexe avant même d’avoir décidé quoi faire.",
-      "Samir s’appuie au fond de sa chaise.",
-      "— D’accord, dit-il. Alors la vraie question, c’est : qu’est-ce qu’on en fait ?",
-      "Thomas baisse les yeux vers son café qu’il n’a pas touché.",
-      "La surface noire tremble à peine quand quelqu’un passe un peu trop vite derrière lui."
+      "L’intérieur sentait encore la bête, malgré les années. Pas une odeur franche. Une mémoire d’odeur. Du sang lessivé cent fois, de la graisse cuite dans les murs, de la javel, de la rouille, et maintenant quelque chose d’autre par-dessus : l’acidité sèche des transferts clandestins.",
+      "Le hall principal s’ouvrait sur une enfilade de rails suspendus, de crochets vides et de salles de découpe reconverties en ateliers. Des câbles couraient au sol. Des batteries de fortune alimentaient des consoles rafistolées, des tables d’opération, des pompes, des blocs de refroidissement. On était loin du luxe stérile des Sterling. Ici, on arrachait les âmes avec des outils qui avaient encore l’air de pouvoir servir à dépecer une carcasse.",
+      "Un bruit m’a fait lever la tête. Pas un cri. Un frottement. Une semelle pressée sur du ciment mouillé. Quelqu’un venait de quitter les lieux en hâte, ou croyait l’avoir fait.",
+      "Sur une table métallique, un registre détrempé restait entrouvert. Une page était marquée d’un nom écrit à la hâte, suivi d’une heure et d’un lieu de rendez-vous : Silas. Quai 9. Minuit moins le quart.",
+      "À côté du registre, un bracelet d’enfant reposait dans une soucoupe de métal. Fil rouge, petit fermoir d’étain, breloque en forme d’étoile. Je l’ai regardé une seconde de trop sans comprendre pourquoi."
     ],
-    deskUpdate: {
-      systemNotes: [
-        "Fenêtre de détection estimée.",
-        "Les copies locales sécurisent le travail.",
-        "Le problème change de statut : de signal à dossier.",
-        "Le risque d’exposition s’affirme.",
-        "Samir accepte le partage sans le banaliser."
-      ],
-      journalEntry: {
-        summary: "Thomas et Samir évaluent la fenêtre de temps avant aggravation et sécurisent leurs données en local.",
-        tone: "alert",
-        tags: ["fenêtre", "sécurisation", "dossier", "partage", "gravité"]
-      },
-      unlockArchives: ["local_copy_protocol"],
-      unlockCharacters: []
-    },
     choices: [
       {
-        id: "scene2-a1-end",
-        label: "Clore le rendez-vous",
-        hint: "Décider de ce qu’ils font ce soir.",
-        nextUnitId: "1.2.4"
+        id: "c2_take_register",
+        label: "Prendre le registre et filer vers le quai 9.",
+        hint: "Aller droit à Silas.",
+        nextUnitId: "1.2.4",
+        effects: {
+          ancrage: -1
+        },
+        journalNote: "Le nom de Silas apparaît dans le registre des abattoirs."
+      },
+      {
+        id: "c2_check_bracelet",
+        label: "Examiner le bracelet avant de partir.",
+        hint: "S’attarder sur le détail troublant.",
+        nextUnitId: "1.2.5",
+        effects: {
+          humanite: 4,
+          ancrage: -3
+        },
+        journalNote: "Un bracelet d’enfant a été trouvé dans l’atelier clandestin."
       }
     ]
   },
 
   {
-    id: "ch1-s02-u04",
+    id: "1.2.4",
     chapterId: "chapter-1",
     chapterNumber: 1,
     unitNumber: "1.2.4",
-    title: "LA ROTONDE",
-    location: "Bar",
-    timeLabel: "19:21",
-    imagePrompt: "Thomas_Samir_Bar_Tension",
-    accessLevel: "public",
-    countdownVisible: false,
+    title: "COURSE CONTRE MINUIT",
+    location: "Sortie des abattoirs",
+    timeLabel: "23:36",
+    accessLevel: "free",
     textBlocks: [
-      "— Pas ce soir, dit Thomas.",
-      "Il entend immédiatement ce qu’il y a dans sa propre réponse.",
-      "Pas seulement de la prudence.",
-      "Du délai.",
-      "Une dernière nuit avant que tout change de catégorie.",
-      "Samir le voit aussi.",
-      "— Voilà, dit-il calmement. C’est exactement ça le problème.",
-      "— Quoi ?",
-      "— Le fait qu’une partie de toi soit soulagée que je sois d’accord.",
-      "Le mot heurte Thomas parce qu’il est juste.",
-      "— Ce n’est pas du soulagement.",
-      "— Si. Pas au sens simple. Pas “tout va bien”. Au sens où maintenant tu n’es plus seul à porter ça, donc tu peux te permettre d’attendre jusqu’à demain sans avoir l’impression de l’abandonner complètement.",
-      "Thomas ne répond pas.",
-      "Le bar continue autour d’eux — voix basses, verres qu’on range, un rire trop fort près du comptoir, le frottement d’une chaise sur le carrelage.",
-      "Tout paraît stable, tenu, supporté par les routines ordinaires du monde.",
-      "C’est presque obscène.",
-      "— Et toi ? dit Thomas. Tu veux faire quoi ?",
-      "Samir regarde la rue par-dessus l’épaule de Thomas.",
-      "— Ce soir, rien qu’on puisse défendre proprement. Si on remonte avec ça maintenant, sans dossier consolidé, on déclenche une chaîne de réactions avant même de savoir à qui elle profite."
+      "J’ai arraché la page utile du registre, laissé le reste boire la pluie qui tombait à travers les verrières fendues, puis je suis reparti. Le nom de Silas battait dans ma tête au rythme de mes pas.",
+      "Dehors, le vent rabattait l’eau sale contre les murs des hangars. Le quai 9 n’était pas loin, mais dans ce quartier la distance se mesure moins en mètres qu’en mauvaises rencontres.",
+      "Quelqu’un m’avait précédé. Je le sentais maintenant. Dans les abattoirs, dans le registre encore humide, dans l’air brutalement vidé de sa présence. Silas bougeait vite, ou quelqu’un bougeait pour lui.",
+      "Au bout de la rue, une corne de navire a grondé dans le brouillard. Minuit approchait. Le piège aussi."
     ],
-    deskUpdate: {
-      systemNotes: [
-        "Le report devient un choix assumé.",
-        "La scène confirme un soulagement coupable.",
-        "La décision de ne rien faire ce soir est validée par Samir.",
-        "Le danger immédiat reste contenu.",
-        "La prochaine étape est reportée au matin."
-      ],
-      journalEntry: {
-        summary: "Thomas accepte de ne rien lancer ce soir, au prix d’un délai qui ressemble déjà à une forme de soulagement.",
-        tone: "lukewarm",
-        tags: ["délai", "soulagement", "précaution", "matin", "contrôle"]
-      },
-      unlockArchives: [],
-      unlockCharacters: []
-    },
     choices: [
       {
-        id: "scene2-a1-next",
-        label: "Passer au lendemain",
-        hint: "Préparer la suite avant le bureau.",
-        nextUnitId: "1.2.11"
+        id: "c2_end_register",
+        label: "Foncer vers le quai 9.",
+        nextUnitId: "1.3.1"
       }
     ]
   },
 
   {
-    id: "ch1-s02-u05",
+    id: "1.2.5",
     chapterId: "chapter-1",
     chapterNumber: 1,
     unitNumber: "1.2.5",
-    title: "LA ROTONDE",
-    location: "Bar",
-    timeLabel: "19:07",
-    imagePrompt: "Thomas_Samir_Bar",
-    accessLevel: "public",
-    countdownVisible: false,
+    title: "L’ÉTOILE",
+    location: "Anciens abattoirs du Quartier Sud",
+    timeLabel: "23:36",
+    accessLevel: "free",
     textBlocks: [
-      "Samir ne bouge pas.",
-      "— Non linéaire. Avec compensation locale temporaire.",
-      "Le mot propagation reste entre les deux tasses.",
-      "Samir baisse les yeux une seconde. Pas sur la table. Sur l’expresso froid qu’il n’a pas touché. Puis il relève la tête.",
-      "— Il y a quelque chose que tu veux entendre ?",
-      "— Oui.",
-      "— Que ça tient. Et que ça ne tient pas encore assez pour qu’on alerte qui que ce soit d’autre.",
-      "Thomas ne répond pas immédiatement.",
-      "La formulation de Samir est ouverte.",
-      "Elle donne à Thomas la place de confirmer ou de reculer.",
-      "Il choisit.",
-      "— Oui.",
-      "— Alors on est sur la même page. Tu ne veux pas me laisser trop loin, et tu ne veux pas me laisser trop près. Tu veux que je sois à l’endroit exact où tu te trouves.",
-      "Ce n’est pas une accusation.",
-      "C’est pire : une observation neutre, formulée sans charge émotionnelle, qui rend la position de Thomas parfaitement visible."
+      "J’ai pris le bracelet entre deux doigts. Léger. Presque rien. Pourtant, mon ventre s’est noué comme si j’avais touché un fil sous tension.",
+      "Le métal était tiède. Impossible. Le lieu était froid, la table aussi, tout autour sentait l’eau morte et les machines de fortune. Mais l’étoile d’étain avait gardé une chaleur dérisoire, intime, comme un objet resté trop longtemps dans une petite main.",
+      "Je n’ai pas cherché à comprendre. Pas encore. Je l’ai glissé dans ma poche avec une précaution absurde, puis j’ai repris le registre. Silas. Quai 9. Minuit moins le quart.",
+      "Quand je suis ressorti sous la pluie, quelque chose en moi s’était déplacé d’un demi-centimètre. Rien d’assez net pour porter un nom. Juste la sensation qu’au bout de cette traque m’attendait autre chose qu’un simple voleur de corps."
     ],
-    deskUpdate: {
-      systemNotes: [
-        "La scène bascule dans l’aveu partiel.",
-        "Samir lit la stratégie de rétention.",
-        "Le seuil de confiance est atteint sans être dépassé.",
-        "La confirmation est implicite, non totale.",
-        "Le langage technique sert d’écran temporaire."
-      ],
-      journalEntry: {
-        summary: "Thomas livre l’essentiel sans tout dévoiler et laisse Samir situer le problème sans franchir le dernier seuil.",
-        tone: "lucid",
-        tags: ["aveu partiel", "pente", "mesure", "retenue", "lecture"]
-      },
-      unlockArchives: ["signal_recurrent"],
-      unlockCharacters: [
-        {
-          id: "samir",
-          note: "Samir comprend la rétention de Thomas."
-        }
-      ]
-    },
     choices: [
       {
-        id: "scene2-a2-continue",
-        label: "Écouter l’analyse de Samir",
-        hint: "Laisser Samir formuler ce qu’il voit.",
-        nextUnitId: "1.2.6"
-      }
-    ]
-  },
-
-  {
-    id: "ch1-s02-u06",
-    chapterId: "chapter-1",
-    chapterNumber: 1,
-    unitNumber: "1.2.6",
-    title: "LA ROTONDE",
-    location: "Bar",
-    timeLabel: "19:14",
-    imagePrompt: "Thomas_Samir_Bar_Tension",
-    accessLevel: "public",
-    countdownVisible: false,
-    textBlocks: [
-      "— Si tu as vraiment deux chemins d’entrée différents qui te mènent à une même forme, tu as déjà dépassé le stade de l’intuition.",
-      "Tu es dans la zone de surveillance récurrente.",
-      "Ce n’est plus une question de si. C’en devient une de quand.",
-      "Le silence tombe entre eux, plus lourd que celui de tout à l’heure.",
-      "Ce silence ne questionne pas. Il constate un terrain.",
-      "Samir reprend, plus bas :",
-      "— Et si je t’ai bien compris, il y a deux autres choses. Mehdi qui t’a écrit. Et ce type dans le parking. Hassan.",
-      "— 00h41.",
-      "Samir hoche la tête. Pas un enregistrement chiffré. En garde-mémoire.",
-      "— Et le vigile qui a vu la direction informatique quitter tard. Avec des badges visiteurs.",
-      "— Oui.",
-      "Samir ferme les yeux deux secondes.",
-      "Pas un sommeil. Un recadrage.",
-      "— Donc tu as une pente qui te prend deux chemins. Tu as un supérieur technique qui veut te voir à 8h demain matin. Tu as un vigile qui a noté que des gens inhabituels circulaient dans le parking. Et tu as rappelé tout ça ce soir.",
-      "— Oui.",
-      "C’est la méthode par laquelle Samir opère : une suite factuelle assemblée avec précision."
-    ],
-    deskUpdate: {
-      systemNotes: [
-        "Recoupement entre plusieurs entrées de preuve.",
-        "Le dossier dépasse la seule donnée graphique.",
-        "Mehdi entre dans la trame active.",
-        "Le parking et les badges visiteurs deviennent pertinents.",
-        "Le problème prend une dimension organisationnelle."
-      ],
-      journalEntry: {
-        summary: "Samir reformule le problème à partir de plusieurs indices, dont Mehdi, le parking et les badges visiteurs.",
-        tone: "cold",
-        tags: ["recoupement", "Mehdi", "parking", "badges", "organisation"]
-      },
-      unlockArchives: ["mehdi_message", "parking_log", "vigile_note"],
-      unlockCharacters: [
-        {
-          id: "mehdi",
-          note: "Entrée indirecte dans le dossier."
-        }
-      ]
-    },
-    choices: [
-      {
-        id: "scene2-a2-close",
-        label: "Poser les règles du lendemain",
-        hint: "Préparer le rendez-vous suivant.",
-        nextUnitId: "1.2.11"
-      }
-    ]
-  },
-
-  {
-    id: "ch1-s02-u07",
-    chapterId: "chapter-1",
-    chapterNumber: 1,
-    unitNumber: "1.2.7",
-    title: "LA ROTONDE",
-    location: "Bar",
-    timeLabel: "19:07",
-    imagePrompt: "Thomas_Samir_Bar_Froid",
-    accessLevel: "public",
-    countdownVisible: false,
-    textBlocks: [
-      "Thomas laisse passer une seconde de trop avant de répondre.",
-      "— J’ai vu quelque chose d’inhabituel cet après-midi, dit-il. Pas assez propre pour que je le formule déjà, mais assez pour ne pas avoir envie de rester seul avec.",
-      "Samir attend.",
-      "— Quel genre de quelque chose ?",
-      "Thomas fixe une rayure dans le bois de la table.",
-      "— Une dérive. Peut-être. Je revérifie.",
-      "Le serveur apporte son expresso.",
-      "Samir ne touche pas à la tasse.",
-      "— Thomas.",
-      "Il dit seulement son prénom.",
-      "Pas pour le brusquer.",
-      "Pour marquer qu’il entend le flou, qu’il le laisse exister une seconde, pas davantage.",
-      "— Je préfère te le dire maintenant plutôt que demain matin si ça tient, ajoute Thomas. Mais je ne suis pas au point où j’ai envie d’annoncer un problème qui n’existe peut-être pas.",
-      "Samir s’appuie un peu au fond de sa chaise.",
-      "Il le regarde comme il regarderait un schéma incomplet : sans hostilité, mais sans accepter de combler lui-même les blancs."
-    ],
-    deskUpdate: {
-      systemNotes: [
-        "Thomas retient l’information essentielle.",
-        "La réponse reste volontairement floue.",
-        "Samir identifie une stratégie d’évitement.",
-        "Le rendez-vous glisse vers la retenue.",
-        "La confiance commence à se contracter."
-      ],
-      journalEntry: {
-        summary: "Thomas choisit de rester vague et d’évaluer Samir sans livrer les données qui permettraient un vrai diagnostic.",
-        tone: "cold",
-        tags: ["flou", "retenue", "évitement", "rétention", "distance"]
-      },
-      unlockArchives: [],
-      unlockCharacters: []
-    },
-    choices: [
-      {
-        id: "scene2-a3-continue",
-        label: "Tenter de sonder Samir",
-        hint: "Voir s’il a lui aussi perçu quelque chose.",
-        nextUnitId: "1.2.8"
-      }
-    ]
-  },
-
-  {
-    id: "ch1-s02-u08",
-    chapterId: "chapter-1",
-    chapterNumber: 1,
-    unitNumber: "1.2.8",
-    title: "LA ROTONDE",
-    location: "Bar",
-    timeLabel: "19:14",
-    imagePrompt: "Thomas_Samir_Bar_Froid",
-    accessLevel: "public",
-    countdownVisible: false,
-    textBlocks: [
-      "Autour d’eux, le bar continue comme si de rien n’était.",
-      "À leur table, rien ne circule vraiment.",
-      "Seulement l’esquisse d’un savoir que Thomas a choisi de tenir hors de portée.",
-      "— Tu n’as rien vu de ton côté ? demande Thomas, presque malgré lui.",
-      "Samir le regarde une seconde.",
-      "— Peut-être, dit-il. Pas assez pour t’en parler vaguement.",
-      "Le coup est léger.",
-      "Il porte quand même.",
-      "Thomas baisse les yeux, puis acquiesce, comme si la phrase ne faisait que constater quelque chose d’évident.",
-      "Quand ils se lèvent, le rendez-vous n’a rien produit de visible.",
-      "Pas de validation.",
-      "Pas de contradiction.",
-      "Pas même un vrai désaccord.",
-      "Seulement une trace.",
-      "Thomas a ouvert la porte, puis il l’a laissée à peine entrebâillée.",
-      "Samir l’a vu.",
-      "Et lui aussi."
-    ],
-    deskUpdate: {
-      systemNotes: [
-        "La rétention produit un sous-texte de défiance.",
-        "Samir laisse le flou sans le valider.",
-        "Le rendez-vous reste non conclusif.",
-        "La porte est entrouverte, mais pas franchie.",
-        "La scène conserve une tension basse et durable."
-      ],
-      journalEntry: {
-        summary: "Thomas tente de sonder Samir sans révéler ses cartes, et ne récupère qu’une réponse partielle en retour.",
-        tone: "lukewarm",
-        tags: ["sondage", "défiance", "flou", "trace", "non-dit"]
-      },
-      unlockArchives: [],
-      unlockCharacters: []
-    },
-    choices: [
-      {
-        id: "scene2-a3-end",
-        label: "Rentrer",
-        hint: "Laisser la conversation en suspens.",
-        nextUnitId: "1.2.11"
-      }
-    ]
-  },
-
-  {
-    id: "ch1-s02-u09",
-    chapterId: "chapter-1",
-    chapterNumber: 1,
-    unitNumber: "1.2.9",
-    title: "LA ROTONDE",
-    location: "Bar",
-    timeLabel: "19:07",
-    imagePrompt: "Thomas_Samir_Bar_Froid",
-    accessLevel: "public",
-    countdownVisible: false,
-    textBlocks: [
-      "Thomas pose la main sur son carnet, sans l’ouvrir.",
-      "— Pas grand-chose encore, dit-il. Une dérive repérée cet après-midi. Rien de proprement alarmant.",
-      "Samir attend la suite.",
-      "— Quel type de dérive ?",
-      "— Un écart de tolérance sur une zone du nord-est. Lent. Un peu trop régulier pour être élégant, pas assez net pour mériter autre chose qu’une surveillance.",
-      "Thomas entend la qualité de sa propre phrase au moment où il la prononce.",
-      "C’est exactement le genre de formulation qui permet de garder un problème dans une taille acceptable.",
-      "Il laisse volontairement de côté ce qui, dans la forme même de la courbe, l’a fait appeler à 15h21.",
-      "Samir prend sa tasse, boit une gorgée, la repose.",
-      "— Donc, si je comprends bien, tu as vu un signal discutable, tu l’as recoupé assez pour qu’il t’occupe toute l’après-midi, et tu me dis maintenant qu’il est probablement banal.",
-      "Thomas soutient son regard.",
-      "— Je te dis qu’il est trop tôt.",
-      "Le silence qui suit n’est pas hostile.",
-      "Il est plus précis que ça.",
-      "Samir est en train de décider s’il le croit, ou s’il croit surtout à l’effort que fait Thomas pour rester du côté des hypothèses admissibles."
-    ],
-    deskUpdate: {
-      systemNotes: [
-        "Minimisation explicite du signal.",
-        "Le problème est requalifié en surveillance prudente.",
-        "Thomas garde le contrôle du tempo.",
-        "Samir teste la solidité du cadrage.",
-        "Le risque est verbalement amoindri."
-      ],
-      journalEntry: {
-        summary: "Thomas minimise l’anomalie pour gagner du temps et garder la scène dans une taille acceptable.",
-        tone: "lukewarm",
-        tags: ["minimisation", "surveillance", "tempo", "contrôle", "déni"]
-      },
-      unlockArchives: [],
-      unlockCharacters: []
-    },
-    choices: [
-      {
-        id: "scene2-a4-end",
-        label: "Maintenir la version",
-        hint: "Laisser Samir avec une hypothèse réduite.",
-        nextUnitId: "1.2.10"
-      }
-    ]
-  },
-
-  {
-    id: "ch1-s02-u10",
-    chapterId: "chapter-1",
-    chapterNumber: 1,
-    unitNumber: "1.2.10",
-    title: "LA ROTONDE",
-    location: "Bar",
-    timeLabel: "19:21",
-    imagePrompt: "Thomas_Dans_La_Rue",
-    accessLevel: "public",
-    countdownVisible: false,
-    textBlocks: [
-      "— D’accord, dit Samir enfin. Trop tôt, alors.",
-      "Il n’insiste pas.",
-      "C’est presque pire.",
-      "Thomas avait anticipé des questions, peut-être une contre-analyse, peut-être même une inquiétude.",
-      "À la place, il lui laisse son propre cadrage.",
-      "Comme s’il refusait de prendre à sa charge quelque chose que Thomas vient lui-même de rabaisser.",
-      "— Tu me tiens au courant ? demande Samir.",
-      "— Oui.",
-      "Le mot sort trop vite.",
-      "Quand ils se lèvent, Thomas sait qu’il a conservé quelque chose : le contrôle, la maîtrise du tempo, la possibilité de revenir demain avec une version plus solide ou plus rassurante.",
-      "Mais il sait aussi ce qu’il a perdu dans l’échange.",
-      "Il n’a pas seulement retenu une information.",
-      "Il a diminué le poids du réel au moment même où il pressentait qu’il ne demandait qu’à peser davantage.",
-      "En remontant son col dans le froid du boulevard, Thomas sent encore, très légèrement, le soulagement d’avoir parlé moins franchement qu’il n’aurait pu.",
-      "C’est un soulagement propre, raisonnable, presque professionnel.",
-      "C’est aussi, il le sait, la forme la plus présentable du déni."
-    ],
-    deskUpdate: {
-      systemNotes: [
-        "Le repli est accepté sans être corrigé.",
-        "La scène se termine sur un désaccord implicite.",
-        "Le réel est allégé au lieu d’être consolidé.",
-        "Samir laisse Thomas avec sa version.",
-        "Le déni devient la forme la plus propre du contrôle."
-      ],
-      journalEntry: {
-        summary: "Thomas maintient une version réduite du problème et quitte le bar avec un contrôle apparent, mais une vérité affaiblie.",
-        tone: "cold",
-        tags: ["repli", "déni", "contrôle", "version réduite", "sortie"]
-      },
-      unlockArchives: [],
-      unlockCharacters: []
-    },
-    choices: [
-      {
-        id: "scene2-a4-end-next",
-        label: "Passer au lendemain",
-        hint: "Rejoindre la scène suivante.",
-        nextUnitId: "1.2.11"
+        id: "c2_end_bracelet",
+        label: "Partir pour le quai 9.",
+        nextUnitId: "1.3.1"
       }
     ]
   }

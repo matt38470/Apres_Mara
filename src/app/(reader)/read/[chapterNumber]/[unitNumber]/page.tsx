@@ -1,23 +1,27 @@
-import { notFound } from 'next/navigation';
-import SceneReaderClient from '@/src/components/SceneReaderClient';
-import { getScene } from '@/src/content'; // <-- On importe depuis notre nouvel index global
+import { notFound } from "next/navigation";
+import { getScene } from "@/src/content/gameContent";
+import SceneReaderClient from "@/src/components/SceneReaderClient";
 
-interface PageProps {
+type PageProps = {
   params: {
     chapterNumber: string;
     unitNumber: string;
   };
-}
+};
 
-export default function UnitPage({ params }: PageProps) {
-  // On utilise la nouvelle fonction pour trouver la scène
-  const currentScene = getScene(params.chapterNumber, params.unitNumber);
+export default function ReadPage({ params }: PageProps) {
+  const chapterNumber = Number(params.chapterNumber);
+  const unitNumber = params.unitNumber;
 
-  // Si la scène n'existe pas (ex: le joueur tape /read/1/9.9)
-  if (!currentScene) {
+  if (Number.isNaN(chapterNumber)) {
     notFound();
   }
 
-  // On envoie la scène au client
-  return <SceneReaderClient scene={currentScene} />;
+  const scene = getScene(chapterNumber, unitNumber);
+
+  if (!scene) {
+    notFound();
+  }
+
+  return <SceneReaderClient scene={scene} />;
 }

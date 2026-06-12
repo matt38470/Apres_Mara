@@ -2,123 +2,196 @@ import type { NarrativeUnit } from '@/src/types/narrative';
 
 export const scene1: NarrativeUnit[] = [
   {
-    id: "ch1-s01-u01",
+    id: "1.1.1",
     chapterId: "chapter-1",
     chapterNumber: 1,
     unitNumber: "1.1.1",
-    title: "LA DÉCOUVERTE",
-    location: "Bureau",
-    timeLabel: "14:37",
-    imagePrompt: "scene_thomas_Bureau",
-    accessLevel: "public",
-    countdownVisible: false,
+    title: "LA DESCENTE",
+    location: "Penthouse Sterling, Canopée",
+    timeLabel: "22:41",
+    accessLevel: "free",
     textBlocks: [
-      "Le graphique est apparu à 14h37.",
-      "Pas une alerte. Rien qui clignote, rien qui sonne. Juste une courbe qui quittait son couloir de tolérance sur le secteur nord-est, légèrement, de façon continue, depuis dix-huit mois.",
-      "Thomas cherchait autre chose. Il a fait défiler l’écran, s’est arrêté, est remonté. Il a isolé la variable, changé l’échelle temporelle, croisé avec les données de charge saisonnière. L’écart tenait. Il a croisé avec les relevés de maintenance. Il tenait encore. Il a ouvert un second terminal.",
-      "Même méthode. Même résultat.",
-      "Il s’est rapproché de l’écran sans s’en rendre compte, les avant-bras posés sur le bureau, les mains immobiles de part et d’autre du clavier. Chez lui, la concentration ne produisait pas d’agitation mais l’inverse.",
-      "Il a fermé les deux fenêtres. Il les a rouvertes.",
-      "Elle n’a rien produit de nouveau.",
-      "Ce n’était pas le chiffre. Le chiffre restait dans la marge — techniquement défendable, le genre de donnée qu’un comité peut examiner vingt minutes avant de décider de surveiller sans agir.",
-      "Ce qui posait problème, c’était la forme.",
-      "Pas un pic.",
-      "Une pente.",
-      "Lente, régulière, continue. Dix-huit mois dans une seule direction.",
-      "Les pics ont des causes. On les trouve, on les traite, on passe à autre chose. Les pentes ont des logiques. Et les logiques des pentes ne s’inversent pas sur décision.",
-      "Thomas connaissait cette différence depuis longtemps. Pas comme une leçon théorique apprise dans un manuel de supervision, mais comme quelque chose de plus usé, de plus concret. Il avait déjà vu des gens très compétents regarder une dérive lente avec un sérieux sincère et pourtant la ranger, faute de mieux, dans la catégorie rassurante des problèmes encore réversibles.",
-      "On ne niait pas les chiffres. On discutait leur portée.",
-      "On gagnait quelques heures comme ça, parfois quelques jours. Le temps de faire passer une pente pour une variation, puis une variation pour un contexte, puis un contexte pour un sujet à suivre au prochain point.",
-      "Parfois cela suffisait. Parfois non."
+      "Les riches de San Telmo vivent au-dessus des nuages, là où l’air conditionné a le goût de l’argent propre et où la pluie a la décence de ne pas tomber. Moi, je transpirais dans un costume de lin qui avait connu de meilleurs enterrements, douze mille pieds au-dessus de ma propre vie.",
+      "L’ascenseur privé des Sterling glissait sans bruit, comme un cercueil bien huilé. Dans la paroi de la cabine, mon reflet me rendait la monnaie de ma fatigue : yeux cernés, barbe trop sombre sur des joues tirées, col mal fermé, et cette cassure au coin de la bouche qui n’était plus un pli mais une habitude.",
+      "Quand les portes se sont ouvertes, l’air froid m’a frappé au visage. Chez les Sterling, même la température se comportait comme un domestique. Le vestibule sentait la cire, le bois noble, le parfum fané et cette propreté clinique qu’ont les maisons où l’on a remplacé la peur de mourir par la peur de perdre ce qu’on a payé pour ne plus mourir.",
+      "Le majordome m’a conduit jusqu’au grand salon. Le marbre clair y était fendu par une traînée de liquide de stase, sombre et irisée comme une nappe de pétrole. Au milieu de la flaque, le Caisson de Transfert restait ouvert comme un sarcophage profané. Les câbles de nuque pendaient hors de la coque avec la mollesse écœurante de nerfs arrachés.",
+      "Valerius m’attendait près du bar, un verre de rhum vieux à la main. Les flics de la Canopée ne ressemblaient jamais à des flics. Ils ressemblaient à des notaires qui auraient appris à menacer sans hausser le ton.",
+      "— Vance, a-t-il dit sans chaleur.",
+      "— Valerius."
     ],
-    deskUpdate: {
-      systemNotes: [
-        "Anomalie silencieuse détectée sur secteur nord-est.",
-        "Écart non signalé par les seuils automatiques.",
-        "Vérifications croisées répétées.",
-        "Le signal critique réside dans la continuité.",
-        "Dérive lente compatible avec un angle mort institutionnel."
-      ],
-      journalEntry: {
-        summary: "Thomas repère une dérive ancienne, multiplie les vérifications et comprend que le danger n’est pas un pic mais une pente déjà installée.",
-        tone: "lucid",
-        tags: ["anomalie", "signal faible", "vérification", "pente", "logique système"]
-      },
-      unlockArchives: ["thomas_dossier"],
-      unlockCharacters: [
-        {
-          id: "thomas",
-          note: "Sujet central désormais associé à l'incident NW-7."
-        }
-      ]
-    },
     choices: [
       {
-        id: "continue-to-blind-spot",
-        label: "Mesurer ce que cela implique",
-        hint: "Comprendre la portée réelle de la dérive.",
-        nextUnitId: "1.1.2"
+        id: "c1_attitude_provocation",
+        label: "Le provoquer d’entrée.",
+        hint: "Installer un rapport de force brutal.",
+        nextUnitId: "1.1.2",
+        effects: {
+          humanite: -5,
+          ancrage: -2
+        },
+        journalNote: "J’ai choisi de provoquer Valerius dès les premières secondes."
+      },
+      {
+        id: "c1_attitude_controle",
+        label: "Rester froid et tenu.",
+        hint: "Garder le contrôle et observer.",
+        nextUnitId: "1.1.3",
+        effects: {
+          humanite: 5
+        },
+        journalNote: "J’ai contenu ma rancœur pour laisser Valerius parler."
       }
     ]
   },
+
   {
-    id: "ch1-s01-u02",
+    id: "1.1.2",
     chapterId: "chapter-1",
     chapterNumber: 1,
     unitNumber: "1.1.2",
-    title: "L'ANGLE MORT",
-    location: "Bureau",
-    timeLabel: "15:12",
-    imagePrompt: "Thomas_Reflexion",
-    accessLevel: "public",
-    countdownVisible: false,
+    title: "MAUVAISE HUILE",
+    location: "Penthouse Sterling, Canopée",
+    timeLabel: "22:43",
+    accessLevel: "free",
     textBlocks: [
-      "Dix-huit mois.",
-      "Il n’avait pas vu la courbe à son début. Personne ne la lui avait signalée. Elle avait existé sans lui dans les données, s’était développée dans les serveurs, avait traversé des réunions de coordination et des rapports trimestriels sans déclencher ce qu’elle aurait dû déclencher. Et maintenant il était là, à découvrir une histoire déjà ancienne.",
-      "Il a regardé l’heure : 15h12. Trente-cinq minutes s’étaient écoulées depuis qu’il avait ouvert le fichier. Il ne les avait pas senties passer.",
-      "Autour de lui, l’open space continuait — claviers, conversations basses, quelqu’un qui riait près de la machine à café, une chaise qu’on repousse, le vibreur d’un téléphone posé sur un plateau. Ce bruit familier qu’il n’entendait plus depuis des années, il l’entendait maintenant avec une netteté bizarre, comme si quelque chose s’était légèrement déplacé entre lui et le reste.",
-      "Pas un basculement intérieur. Un décalage plus fin. Les autres poursuivaient leur après-midi de travail ; lui regardait une forme qui s’était installée depuis dix-huit mois sans demander la permission à personne.",
-      "Il a enregistré les captures. Il a créé un dossier dans son espace local — pas le serveur partagé, la partition chiffrée qu’il utilisait pour les dossiers sensibles en cours d’instruction. Il l’a fait avant d’avoir décidé de le faire. Le geste a précédé la pensée. Il a nommé le dossier NW-7. Les deux lettres de sa fenêtre de bureau, le chiffre du mois. Première désignation venue, sans importance apparente. Il garderait ce nom.",
-      "Puis il a regardé par la fenêtre. Dehors, le périphérique, les immeubles de bureaux, le ciel gris de mars tassé au-dessus de la ville. Plus loin, des barres d’habitation, une grue immobile, la ligne sombre d’un échangeur. Une ville qui fonctionnait — feux, métros, ascenseurs, hôpitaux, data centers, pompes, chauffage, tout ce qui marche sans qu’on y pense précisément parce que ça marche.",
-      "Thomas regardait souvent le monde comme ça. Avec l’habitude professionnelle de quelqu’un dont le métier consiste à maintenir l’invisible.",
-      "La fragilité des systèmes complexes n’était pas pour lui une révélation. Ce qu’il n’avait jamais eu, c’était une courbe comme celle-là. Pas abstraite. Pas hypothétique. Réelle, chiffrée, datée, sur un secteur qu’il connaissait : nord-est, trois nœuds de distribution majeurs, deux millions d’abonnés directs, des hôpitaux, des centres de données, un aéroport secondaire.",
-      "Pas une fragilité générale. Une fragilité localisée, déjà engagée.",
-      "Il a pris son téléphone. Il a cherché le numéro de Samir.",
-      "Samir Hadj travaillait à la direction technique du réseau de transport — un échelon au-dessus. Thomas respectait son jugement précisément parce que Samir ne cherchait jamais à rassurer. Quand il disait ça tient, ça tenait.",
-      "Mais appeler Samir, c’était sortir la courbe de son écran pour la poser dans une conversation réelle. C’était la rendre un peu plus vraie qu’elle ne l’était déjà. Tant qu’un seul homme avait vu la pente, la pente pouvait rester une erreur de lecture.",
-      "Il a rouvert le fichier. Même résultat. Évidemment.",
-      "Il a appelé à 15h21."
+      "Je l’ai laissé mariner une seconde avec son verre et son costume bien taillé. Puis je lui ai offert ce que les gens comme lui détestent le plus : un mépris sans effort.",
+      "— J’ignorais que la milice servait aussi les digestifs, ai-je dit.",
+      "Son regard n’a pas bougé, mais quelque chose s’est tendu dans sa mâchoire. J’aurais presque préféré qu’il se mette en colère. La politesse chez les hommes corrompus n’est qu’une autre façon de montrer les dents.",
+      "Je l’ai dépassé sans lui demander la permission et me suis accroupi près de la flaque. L’odeur m’a pris à la gorge : ozone, antiseptique, métal tiède, et ce fond presque sucré qu’on retrouve toujours quand une conscience a été déplacée trop vite.",
+      "Pas un travail d’amateur. Pas un cambriolage improvisé. Une extraction propre, nerveuse, faite par quelqu’un qui connaissait la chair.",
+      "— Ils l’ont prise pendant son sommeil, a dit Valerius derrière moi. Pas de lutte. Pas de cris. Les sédatifs étaient encore dans le circuit."
     ],
-    deskUpdate: {
-      systemNotes: [
-        "Historique d'anomalie antérieur à la prise de conscience du sujet.",
-        "Décalage perceptif entre activité collective et perception individuelle.",
-        "Création d'un espace local chiffré dédié.",
-        "L'incident reçoit sa première désignation : NW-7.",
-        "Sortie de l'information du périmètre solitaire.",
-        "Contact technique externe activé."
-      ],
-      journalEntry: {
-        summary: "Thomas comprend qu'il arrive trop tard dans un système déjà aveugle, sécurise les données sous le nom NW-7, puis décide d'impliquer Samir.",
-        tone: "cold",
-        tags: ["angle mort", "retard", "NW-7", "préparation", "appel"]
-      },
-      unlockArchives: ["serveur_n4_rules", "samirdossier"],
-      unlockCharacters: [
-        {
-          id: "samir",
-          note: "Premier relais externe mobilisé autour de NW-7."
-        }
-      ]
-    },
     choices: [
       {
-        id: "meet-samir",
-        label: "Rejoindre Samir à La Rotonde",
-        hint: "Le rendez-vous décisif.",
-        nextUnitId: "1.2.1",
-        effects: { preparation: 5, discretion: -5, alerte: 5, charge: 15 },
-        unlockArchive: "samirdossier"
+        id: "c1_after_provocation",
+        label: "Examiner le caisson de plus près.",
+        nextUnitId: "1.1.4"
+      }
+    ]
+  },
+
+  {
+    id: "1.1.3",
+    chapterId: "chapter-1",
+    chapterNumber: 1,
+    unitNumber: "1.1.3",
+    title: "GLACE MINCE",
+    location: "Penthouse Sterling, Canopée",
+    timeLabel: "22:43",
+    accessLevel: "free",
+    textBlocks: [
+      "Je lui ai accordé un simple signe de tête. Pas assez pour appeler ça de la courtoisie. Juste ce qu’il fallait pour qu’il se détende d’un demi-centimètre et commette l’erreur de croire qu’il tenait le terrain.",
+      "— Tu tiens la pièce, ai-je dit. Je regarde le cadavre invisible.",
+      "Valerius a laissé échapper un souffle par le nez, quelque part entre l’agacement et l’amusement. Avec les hommes comme lui, tout ce qui ressemble à du calme passe pour une concession. Ils confondent toujours la retenue avec l’obéissance.",
+      "Je me suis approché du caisson sans plus lui accorder d’importance. L’odeur m’a saisi immédiatement : ozone, antiseptique, métal tiède, et cette note organique presque douceâtre qui annonce qu’on a fait voyager une âme plus vite que le corps ne pouvait l’encaisser.",
+      "Travail net. Méthodique. Pas l’œuvre d’un pauvre type paniqué.",
+      "— Ils l’ont prise pendant son sommeil, a dit Valerius. Les sédatifs étaient encore dans le circuit."
+    ],
+    choices: [
+      {
+        id: "c1_after_controle",
+        label: "Poursuivre l’examen.",
+        nextUnitId: "1.1.4"
+      }
+    ]
+  },
+
+  {
+    id: "1.1.4",
+    chapterId: "chapter-1",
+    chapterNumber: 1,
+    unitNumber: "1.1.4",
+    title: "LE POSTE À LAMPES",
+    location: "Penthouse Sterling, Canopée",
+    timeLabel: "22:46",
+    accessLevel: "free",
+    textBlocks: [
+      "J’ai passé deux doigts sur les points d’ancrage brisés derrière la têtière. Une coquille de chair, pas du synthétique. Une enveloppe jeune, coûteuse, travaillée pour durer. Le genre de corps que les vieilles fortunes s’offrent pour recommencer à mentir au monde avec une peau neuve.",
+      "— Où l’ont-ils mise ? ai-je demandé.",
+      "Valerius a répondu d’un mouvement du menton.",
+      "Sur la table basse, entre un cendrier en cristal et un bouquet de lys déjà en train de tourner, trônait un vieux poste à lampes. Cabossé, repeint plusieurs fois, poignée de cuir craquelé, cadran jaune malade. Une antiquité de dock. Son ventilateur toussait comme un vieillard qu’on aurait forcé à avaler des clous.",
+      "— Échange standard, a dit Valerius. Ils ont siphonné la vieille hors de sa coquille de luxe et l’ont recrachée là-dedans. La famille a reçu un message. Paiement avant l’aube, sinon surcharge.",
+      "Je me suis approché de la boîte encore chaude. On ne s’habitue jamais à ça. À l’idée qu’une personne puisse être réduite à une vibration dans du métal fatigué. J’ai branché mon lecteur de terrain. Le cadran à aiguille a frissonné, hésité, puis s’est mis à suivre une piste.",
+      "Derrière moi, la voix de Valerius est devenue plus dure.",
+      "— Tu bosses pour la famille, Vance. Ce que ton jouet trouve, tu me le donnes."
+    ],
+    choices: [
+      {
+        id: "c1_share_address",
+        label: "Donner l’adresse à Valerius.",
+        hint: "Faire affaire avec la milice pour avancer plus vite.",
+        nextUnitId: "1.1.5",
+        effects: {
+          dette: -2,
+          humanite: -8
+        },
+        journalNote: "J’ai partagé la piste des docks avec Valerius."
+      },
+      {
+        id: "c1_hide_address",
+        label: "Mentir. Garder la piste pour vous.",
+        hint: "Partir seul vers les docks.",
+        nextUnitId: "1.1.6",
+        effects: {
+          ancrage: 3,
+          humanite: 8
+        },
+        journalNote: "J’ai menti à Valerius pour garder le contrôle de la traque."
+      }
+    ]
+  },
+
+  {
+    id: "1.1.5",
+    chapterId: "chapter-1",
+    chapterNumber: 1,
+    unitNumber: "1.1.5",
+    title: "PACTE SALE",
+    location: "Penthouse Sterling, Canopée",
+    timeLabel: "22:49",
+    accessLevel: "free",
+    textBlocks: [
+      "L’aiguille s’était stabilisée sur le Quartier Sud, du côté des anciens abattoirs. J’ai laissé le lecteur branché une seconde de plus, juste assez pour sentir monter l’odeur de brûlé du poste à lampes.",
+      "Puis je me suis redressé et j’ai regardé Valerius en face.",
+      "— Les docks, ai-je dit. Les anciens abattoirs.",
+      "Il a à peine souri. Pas un sourire de gratitude. Un sourire de propriétaire. Comme si l’information lui revenait de droit et que ma présence dans la pièce relevait d’une simple formalité administrative.",
+      "— Je savais qu’on finirait par se comprendre.",
+      "— Ne vous emballe pas, ai-je répondu. On va au même endroit. Ce n’est pas la même chose.",
+      "Au-dehors, un éclair a découpé les vitres du salon. Très loin en dessous, la pluie tombait sur les quartiers pauvres avec une régularité de châtiment. Les docks m’attendaient. Cette fois, ils m’attendraient avec un flic propre sur lui dans les talons."
+    ],
+    choices: [
+      {
+        id: "c1_end_shared",
+        label: "Descendre vers le Quartier Sud.",
+        nextUnitId: "1.2.1a"
+      }
+    ]
+  },
+
+  {
+    id: "1.1.6",
+    chapterId: "chapter-1",
+    chapterNumber: 1,
+    unitNumber: "1.1.6",
+    title: "SEUL DANS LA PLUIE",
+    location: "Penthouse Sterling, Canopée",
+    timeLabel: "22:49",
+    accessLevel: "free",
+    textBlocks: [
+      "L’aiguille s’était stabilisée sur le Quartier Sud, du côté des anciens abattoirs. J’ai mémorisé le signal, puis j’ai débranché d’un geste sec.",
+      "— Alors ? a demandé Valerius.",
+      "J’ai regardé le cadran mort dans ma main, puis son costume trop net, son verre encore plein, ses yeux de comptable armé.",
+      "— Brouillé, ai-je menti. Trop de rebonds. Celui qui a monté ça savait masquer sa trace.",
+      "Il m’a observé sans parler. Il n’était pas convaincu. Les hommes comme lui ne croient jamais vraiment. Ils classent, ils retiennent, ils attendent leur heure.",
+      "— Si tu me mènes en bateau, Vance…",
+      "— Tu feras quoi ? m’acheter un deuxième costume ?",
+      "Je n’ai pas attendu sa réponse. J’ai rangé le lecteur dans ma poche et me suis dirigé vers la sortie. Au-dehors, la ville ruisselait sous l’orage. Les anciens abattoirs m’attendaient, avec leur boue, leur rouille et leurs chiens maigres. J’irais seul. C’était plus dangereux. C’était aussi plus honnête."
+    ],
+    choices: [
+      {
+        id: "c1_end_hidden",
+        label: "Prendre l’ascenseur et partir seul.",
+        nextUnitId: "1.2.1b"
       }
     ]
   }

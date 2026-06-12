@@ -35,8 +35,10 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts",
-    "next.config.mjs"
-, "src/components/Gauge.tsx", "src/components/ArchivesModal.tsx"  ],
+    "next.config.mjs",
+    "src/components/Gauge.tsx",
+    "src/components/ArchivesModal.tsx"
+  ],
   "exclude": [
     "node_modules"
   ]

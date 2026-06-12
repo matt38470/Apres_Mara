@@ -3,14 +3,26 @@
 @variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f9fafb;
-  --foreground: #111827;
+  /* Thème clair : Ambiance papier jauni, vieux dossiers d'enquête, tabac froid */
+  --background: #fdfaf3; /* Blanc cassé / beige très léger */
+  --foreground: #2d2a26; /* Gris presque noir, couleur encre */
+  
+  /* Ajoutons des variables pour nos accents de couleurs */
+  --accent-neon: #e09f3e; /* Jaune/orange chaud (lumière de rue) */
+  --accent-blood: #9e2a2b; /* Rouge sombre (dette, danger) */
+  
   color-scheme: light;
 }
 
 html.dark {
-  --background: #0a0a0a;
-  --foreground: #e5e7eb;
+  /* Thème sombre : Ambiance nuit tropicale étouffante, ruelles poisseuses, néons */
+  --background: #0d1317; /* Vert-gris extrêmement profond, presque noir */
+  --foreground: #e6e4d5; /* Beige pâle pour le confort de lecture dans le noir */
+  
+  /* Accents de nuit */
+  --accent-neon: #ffba08; /* Jaune néon brillant (lumière crue) */
+  --accent-blood: #dc2f02; /* Rouge vif (sang frais) */
+  
   color-scheme: dark;
 }
 
