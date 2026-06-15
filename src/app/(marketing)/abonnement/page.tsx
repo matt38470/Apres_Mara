@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -23,6 +24,40 @@ export default function AbonnementPage() {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? "/";
   const chapter = searchParams.get("chapter");
+  const paymentStatus = searchParams.get("payment");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleCheckout() {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ redirect }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // Pas connecté → rediriger vers connexion
+        if (res.status === 401) {
+          window.location.href = `/auth/connexion?redirect=${encodeURIComponent(`/abonnement?redirect=${redirect}`)}`;
+          return;
+        }
+        throw new Error(data.error ?? "Erreur inconnue");
+      }
+
+      // Rediriger vers Stripe Checkout
+      window.location.href = data.url;
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-background text-foreground">
@@ -43,6 +78,18 @@ export default function AbonnementPage() {
           transition={{ duration: 0.9, ease: "easeOut" }}
           className="w-full"
         >
+          {/* Message succès paiement */}
+          {paymentStatus === "success" && (
+            <div className="mx-auto mb-8 max-w-md rounded-xl px-6 py-4 text-sm font-medium" style={{ backgroundColor: "rgba(224,159,62,0.15)", color: "var(--accent-neon)" }}>
+              ✅ Paiement confirmé ! Ton accès premium est activé.
+            </div>
+          )}
+          {paymentStatus === "cancelled" && (
+            <div className="mx-auto mb-8 max-w-md rounded-xl px-6 py-4 text-sm font-medium" style={{ backgroundColor: "rgba(158,42,43,0.1)", color: "var(--accent-blood)" }}>
+              Paiement annulé. Tu peux réessayer quand tu veux.
+            </div>
+          )}
+
           {/* Accroche contextuelle */}
           {chapter && (
             <p className="mb-4 text-sm font-medium uppercase tracking-widest text-orange-500 dark:text-orange-400">
@@ -54,11 +101,11 @@ export default function AbonnementPage() {
             Après Mara
           </span>
           <h1 className="mb-4 text-4xl font-bold leading-tight tracking-tight text-neutral-950 md:text-6xl dark:text-white">
-            Continue l'enquête
+            Continue l’enquête
           </h1>
           <p className="mx-auto mb-14 max-w-xl text-lg font-light leading-relaxed text-neutral-600 dark:text-gray-400">
             Les chapitres 1 à 3 sont gratuits. Pour aller plus loin dans le dossier,
-            débloque l'accès complet à l'histoire.
+            débloque l’accès complet à l’histoire.
           </p>
 
           {/* Cartes */}
@@ -127,12 +174,19 @@ export default function AbonnementPage() {
                 ))}
               </ul>
 
-              {/* Ce bouton sera remplacé par un lien Stripe au prochain step */}
+              {error && (
+                <p className="mb-3 rounded-lg px-3 py-2 text-xs" style={{ backgroundColor: "rgba(0,0,0,0.15)", color: "#fff" }}>
+                  {error}
+                </p>
+              )}
+
               <button
-                disabled
-                className="block w-full cursor-not-allowed rounded-full bg-neutral-950 py-3 text-center text-sm font-semibold uppercase tracking-widest text-white opacity-80"
+                onClick={handleCheckout}
+                disabled={loading}
+                className="block w-full rounded-full bg-neutral-950 py-3 text-center text-sm font-semibold uppercase tracking-widest text-white transition-opacity"
+                style={{ opacity: loading ? 0.6 : 1, cursor: loading ? "wait" : "pointer" }}
               >
-                Payer 4,99 € — bientôt disponible
+                {loading ? "Redirection..." : "Payer 4,99 €"}
               </button>
             </motion.div>
           </div>
