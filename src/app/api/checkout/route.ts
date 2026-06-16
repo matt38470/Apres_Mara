@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { createClient } from "@/src/lib/supabase/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-05-28.basil",
+  apiVersion: "2025-02-24.acacia",
 });
 
 const PRICE_IDS = {
