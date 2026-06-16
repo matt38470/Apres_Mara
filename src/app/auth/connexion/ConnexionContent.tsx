@@ -39,9 +39,9 @@ export default function ConnexionContent() {
         options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
       });
       if (error) {
-        setError("Erreur lors de l\u2019inscription\u00a0: " + error.message);
+        setError("Erreur lors de l’inscription : " + error.message);
       } else {
-        setMessage("Un email de confirmation t\u2019a \u00e9t\u00e9 envoy\u00e9. V\u00e9rifie ta bo\u00eete mail.");
+        setMessage("Un email de confirmation t’a été envoyé. Vérifie ta boîte mail.");
       }
     }
 
@@ -52,13 +52,12 @@ export default function ConnexionContent() {
     <main className="min-h-screen flex items-center justify-center px-4 bg-[#f7f5f0] dark:bg-[#0c0d10]">
       <div className="w-full max-w-md">
 
-        {/* En-t\u00eate */}
         <div className="text-center mb-10">
           <Link
             href="/"
             className="inline-block mb-6 text-xs font-bold uppercase tracking-[0.24em] text-neutral-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
           >
-            \u2190 Retour
+            ← Retour
           </Link>
 
           <div className="text-[10px] font-bold uppercase tracking-[0.36em] text-amber-600 dark:text-amber-400 mb-2">
@@ -66,17 +65,16 @@ export default function ConnexionContent() {
           </div>
 
           <h1 className="text-2xl font-semibold tracking-tight text-neutral-950 dark:text-white">
-            Le Cartel des \u00c2mes
+            Le Cartel des Âmes
           </h1>
 
           <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
             {mode === "login"
-              ? "Acc\u00e8de \u00e0 ton dossier traqueur"
+              ? "Accède à ton dossier traqueur"
               : "Ouvre un nouveau dossier"}
           </p>
         </div>
 
-        {/* Tabs */}
         <div className="flex mb-8 border-b border-black/10 dark:border-white/10">
           {(["login", "signup"] as const).map((m) => (
             <button
@@ -89,12 +87,11 @@ export default function ConnexionContent() {
                   : "border-transparent text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
               }`}
             >
-              {m === "login" ? "Connexion" : "Cr\u00e9er un compte"}
+              {m === "login" ? "Connexion" : "Créer un compte"}
             </button>
           ))}
         </div>
 
-        {/* Formulaire */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] font-bold uppercase tracking-[0.24em] text-neutral-500">
@@ -119,7 +116,7 @@ export default function ConnexionContent() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
+              placeholder="••••••••"
               className="w-full px-4 py-3 rounded-xl text-sm bg-white/80 dark:bg-white/[0.04] border border-black/10 dark:border-white/10 text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 outline-none transition-all focus:border-amber-500 dark:focus:border-amber-400 focus:ring-2 focus:ring-amber-500/20"
             />
           </div>
@@ -145,13 +142,13 @@ export default function ConnexionContent() {
               ? "..."
               : mode === "login"
               ? "Se connecter"
-              : "Cr\u00e9er le compte"}
+              : "Créer le compte"}
           </button>
         </form>
 
         {mode === "login" && (
           <p className="text-center text-xs mt-6 text-neutral-400">
-            Mot de passe oubli\u00e9\u00a0? Contacte-nous.
+            Mot de passe oublié ? Contacte-nous.
           </p>
         )}
 
