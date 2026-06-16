@@ -13,7 +13,6 @@ export type MentalState =
   | "lucide"
   | "tourmente"
   | "visionnaire"
-  | "pression"
   | "fracture"
   | "stable";
 
@@ -198,7 +197,6 @@ export const useGameStore = create<GameState>()(
 
       clearLastEffects: () => set({ lastEffects: null }),
 
-      // Efface tous les choix et remet les jauges à zéro
       resetGame: () =>
         set((state) => ({
           unlockedCharacters: [],
@@ -216,7 +214,6 @@ export const useGameStore = create<GameState>()(
           settings: state.settings,
         })),
 
-      // Efface uniquement les choix des unités du chapitre donné
       resetChapter: (chapterNumber: number) =>
         set((state) => {
           const prefix = `${chapterNumber}.`;
