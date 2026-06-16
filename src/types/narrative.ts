@@ -47,6 +47,13 @@ export interface DeskUpdate {
   unlockCharacters?: DeskCharacterUnlock[];
 }
 
+export type ChoiceRequirement = {
+  stat: GaugeKey;
+  operator: ">=" | "<=" | ">" | "<" | "==";
+  value: number;
+  failText?: string;
+};
+
 export type NarrativeChoice = {
   id: string;
   label: string;
@@ -54,6 +61,7 @@ export type NarrativeChoice = {
   nextUnitId: string;
   effects?: GaugeEffects;
   conditions?: Condition[];
+  requirements?: ChoiceRequirement[];
   unlockArchive?: string;
   journalNote?: string;
   systemNote?: string;
