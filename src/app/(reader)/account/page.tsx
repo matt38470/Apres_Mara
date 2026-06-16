@@ -33,6 +33,12 @@ export default async function AccountPage({
     .eq("user_id", user.id)
     .maybeSingle();
 
+  const { data: progress } = await supabase
+    .from("user_progress")
+    .select("chapter, unit_number")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
   const hasPremium = entitlement?.has_premium ?? false;
   const premiumSince = entitlement?.premium_since
     ? new Date(entitlement.premium_since).toLocaleDateString("fr-FR", {
@@ -41,6 +47,14 @@ export default async function AccountPage({
         year: "numeric",
       })
     : null;
+
+  const resumeUrl = progress
+    ? `/read/${progress.chapter}/${progress.unit_number}`
+    : "/read/1/1.1.1";
+
+  const resumeLabel = progress
+    ? `Reprendre — Chapitre ${progress.chapter}, scène ${progress.unit_number}`
+    : "Commencer la lecture";
 
   return (
     <main
@@ -150,7 +164,7 @@ export default async function AccountPage({
                   color: "#0d1317",
                 }}
               >
-                Débloquer l’accès complet
+                Débloquer l'accès complet
               </Link>
             </div>
           )}
@@ -168,12 +182,19 @@ export default async function AccountPage({
           </h2>
 
           <Link
-            href="/read/1/1.1.1"
-            className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all hover:opacity-70"
+            href={resumeUrl}
+            className="flex flex-col gap-1 rounded-xl px-4 py-3 text-sm transition-all hover:opacity-70"
             style={{ border: "1px solid rgba(128,128,128,0.15)" }}
           >
-            <span>Reprendre la lecture</span>
-            <span className="ml-auto opacity-40">→</span>
+            <div className="flex items-center justify-between">
+              <span>{progress ? "Reprendre la lecture" : "Commencer la lecture"}</span>
+              <span className="opacity-40">→</span>
+            </div>
+            {progress && (
+              <span className="text-xs opacity-40">
+                Chapitre {progress.chapter} · Scène {progress.unit_number}
+              </span>
+            )}
           </Link>
 
           <form action={signOut}>

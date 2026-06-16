@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import { useGameStore } from "@/src/store/gameStore";
 import type { NarrativeUnit, Condition } from "@/src/types/narrative";
+import { saveProgress } from "@/src/actions/saveProgress";
 
 export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
   const router = useRouter();
+  const [, startTransition] = useTransition();
 
   const {
     applyChoice,
@@ -25,58 +27,44 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
   useEffect(() => {
     const unlockArchives = scene.deskUpdate?.unlockArchives ?? [];
     const unlockCharacters = (scene.deskUpdate?.unlockCharacters ?? []).map((c) => c.id);
-
-    if (unlockArchives.length > 0) {
-      addArchives(unlockArchives);
-    }
-
-    if (unlockCharacters.length > 0) {
-      addCharacters(unlockCharacters);
-    }
+    if (unlockArchives.length > 0) addArchives(unlockArchives);
+    if (unlockCharacters.length > 0) addCharacters(unlockCharacters);
   }, [scene.id, scene.deskUpdate, addArchives, addCharacters]);
 
   useEffect(() => {
     setCurrentUnitId(scene.id);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [scene.id, setCurrentUnitId]);
+    // Sauvegarder la progression à chaque nouvelle scène chargée
+    startTransition(() => {
+      saveProgress(scene.chapterNumber, scene.unitNumber);
+    });
+  }, [scene.id, scene.chapterNumber, scene.unitNumber, setCurrentUnitId]);
 
   const getFontClass = () => {
     switch (settings.fontFamily) {
-      case "serif":
-        return "font-serif";
-      case "mono":
-        return "font-mono tracking-tight";
+      case "serif": return "font-serif";
+      case "mono": return "font-mono tracking-tight";
       case "sans":
-      default:
-        return "font-sans";
+      default: return "font-sans";
     }
   };
 
   const checkChoiceConditions = (conditions?: Condition[]): boolean => {
     if (!conditions || conditions.length === 0) return true;
-
     return conditions.every((cond) => {
       let current: unknown;
-
       if (cond.key === "mentalState") {
         current = mentalState;
-      } else if (
-        cond.key === "dette" ||
-        cond.key === "ancrage" ||
-        cond.key === "humanite"
-      ) {
+      } else if (cond.key === "dette" || cond.key === "ancrage" || cond.key === "humanite") {
         current = gauges[cond.key];
       } else if (cond.key === "archives") {
         current = [];
       } else {
         return true;
       }
-
       switch (cond.operator) {
-        case "eq":
-          return current === cond.value;
-        case "neq":
-          return current !== cond.value;
+        case "eq": return current === cond.value;
+        case "neq": return current !== cond.value;
         case "gte": {
           const target = typeof cond.value === "number" ? cond.value : Number(cond.value);
           return typeof current === "number" && current >= target;
@@ -85,24 +73,21 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
           const target = typeof cond.value === "number" ? cond.value : Number(cond.value);
           return typeof current === "number" && current <= target;
         }
-        case "includes":
-          return Array.isArray(current) && current.includes(cond.value);
-        default:
-          return true;
+        case "includes": return Array.isArray(current) && current.includes(cond.value);
+        default: return true;
       }
     });
   };
 
-const resolveNextUnitUrl = (nextUnitId: string) => {
-  if (nextUnitId.startsWith("ch1-u")) {
-    const numPart = nextUnitId.split("-u")[1];
-    const num = parseInt(numPart, 10);
-    return `/read/1/1.${num}`;
-  }
-
-  const nextChapterNumber = nextUnitId.split(".")[0];
-  return `/read/${nextChapterNumber}/${nextUnitId}`;
-};
+  const resolveNextUnitUrl = (nextUnitId: string) => {
+    if (nextUnitId.startsWith("ch1-u")) {
+      const numPart = nextUnitId.split("-u")[1];
+      const num = parseInt(numPart, 10);
+      return `/read/1/1.${num}`;
+    }
+    const nextChapterNumber = nextUnitId.split(".")[0];
+    return `/read/${nextChapterNumber}/${nextUnitId}`;
+  };
 
   return (
     <AnimatePresence mode="wait">
@@ -135,7 +120,6 @@ const resolveNextUnitUrl = (nextUnitId: string) => {
               {scene.title}
             </h1>
           </div>
-
           {scene.timeLabel && (
             <span className="rounded-full border border-black/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-neutral-500 dark:border-white/10 dark:text-neutral-400">
               {scene.timeLabel}
@@ -166,9 +150,7 @@ const resolveNextUnitUrl = (nextUnitId: string) => {
                   if (disabled) return;
 
                   if (sceneAlreadyResolved) {
-                    if (alreadyChosen) {
-                      router.push(resolveNextUnitUrl(choice.nextUnitId));
-                    }
+                    if (alreadyChosen) router.push(resolveNextUnitUrl(choice.nextUnitId));
                     return;
                   }
 
@@ -216,15 +198,10 @@ const resolveNextUnitUrl = (nextUnitId: string) => {
               >
                 <div className="flex flex-col">
                   <span className="font-medium">{choice.label}</span>
-
                   {alreadyChosen ? (
-                    <span className="mt-1 text-xs italic opacity-90">
-                      Choix déjà validé
-                    </span>
+                    <span className="mt-1 text-xs italic opacity-90">Choix déjà validé</span>
                   ) : choice.hint ? (
-                    <span className="mt-1 text-xs italic opacity-90">
-                      {choice.hint}
-                    </span>
+                    <span className="mt-1 text-xs italic opacity-90">{choice.hint}</span>
                   ) : null}
                 </div>
               </button>
