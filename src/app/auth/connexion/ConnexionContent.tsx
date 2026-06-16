@@ -39,9 +39,9 @@ export default function ConnexionContent() {
         options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
       });
       if (error) {
-        setError("Erreur lors de l'inscription\u00a0: " + error.message);
+        setError("Erreur lors de l\u2019inscription\u00a0: " + error.message);
       } else {
-        setMessage("Un email de confirmation t'a \u00e9t\u00e9 envoy\u00e9. V\u00e9rifie ta bo\u00eete mail.");
+        setMessage("Un email de confirmation t\u2019a \u00e9t\u00e9 envoy\u00e9. V\u00e9rifie ta bo\u00eete mail.");
       }
     }
 
@@ -52,13 +52,13 @@ export default function ConnexionContent() {
     <main className="min-h-screen flex items-center justify-center px-4 bg-[#f7f5f0] dark:bg-[#0c0d10]">
       <div className="w-full max-w-md">
 
-        {/* En-tête */}
+        {/* En-t\u00eate */}
         <div className="text-center mb-10">
           <Link
             href="/"
             className="inline-block mb-6 text-xs font-bold uppercase tracking-[0.24em] text-neutral-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
           >
-            &#8592; Retour
+            \u2190 Retour
           </Link>
 
           <div className="text-[10px] font-bold uppercase tracking-[0.36em] text-amber-600 dark:text-amber-400 mb-2">
