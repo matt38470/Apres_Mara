@@ -87,3 +87,19 @@ export type Chapter = {
   teaser?: string;
   unitIds: string[];
 };
+
+/** Extended chapter metadata used by chapters that define richer meta (subtitle, synopsis, etc.) */
+export type ChapterMeta = {
+  id: string;
+  chapterNumber: number;
+  title: string;
+  subtitle?: string;
+  timeRange?: string;
+  location?: string;
+  accessLevel: AccessLevel;
+  requiredEntitlement?: EntitlementKey;
+  teaser?: string;
+  synopsis?: string;
+  unitIds?: string[];
+  sceneIds?: string[];
+};
