@@ -39,8 +39,8 @@ export default function RestartButtons({
         )}
       </button>
 
-      {/* Reprendre depuis le début du chapitre en cours */}
-      {progress && (
+      {/* Reprendre depuis le début du chapitre — masqué au chapitre 1 */}
+      {progress && currentChapter > 1 && (
         <button
           onClick={() => {
             resetChapter(currentChapter);
