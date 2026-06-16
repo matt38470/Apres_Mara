@@ -2,14 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useTransition } from "react";
+import { useEffect } from "react";
 import { useGameStore } from "@/src/store/gameStore";
 import type { NarrativeUnit, Condition } from "@/src/types/narrative";
 import { saveProgress } from "@/src/actions/saveProgress";
 
 export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
   const router = useRouter();
-  const [, startTransition] = useTransition();
 
   const {
     applyChoice,
@@ -34,11 +33,7 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
   useEffect(() => {
     setCurrentUnitId(scene.id);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    // Sauvegarder la progression à chaque nouvelle scène chargée
-    startTransition(() => {
-      saveProgress(scene.chapterNumber, scene.unitNumber);
-    });
-  }, [scene.id, scene.chapterNumber, scene.unitNumber, setCurrentUnitId]);
+  }, [scene.id, setCurrentUnitId]);
 
   const getFontClass = () => {
     switch (settings.fontFamily) {
@@ -146,11 +141,13 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
                 key={choice.id}
                 type="button"
                 disabled={disabled}
-                onClick={() => {
+                onClick={async () => {
                   if (disabled) return;
 
+                  const nextUrl = resolveNextUnitUrl(choice.nextUnitId);
+
                   if (sceneAlreadyResolved) {
-                    if (alreadyChosen) router.push(resolveNextUnitUrl(choice.nextUnitId));
+                    if (alreadyChosen) router.push(nextUrl);
                     return;
                   }
 
@@ -184,8 +181,15 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
                     });
                   }
 
+                  // Extraire le chapitre et unitNumber de la scène suivante
+                  const nextChapter = parseInt(choice.nextUnitId.split(".")[0], 10);
+                  const nextUnit = choice.nextUnitId;
+
+                  // Sauvegarder AVANT de naviguer pour que /account soit à jour
+                  await saveProgress(nextChapter, nextUnit);
+
                   setTimeout(() => {
-                    router.push(resolveNextUnitUrl(choice.nextUnitId));
+                    router.push(nextUrl);
                   }, hasGaugeChange || hasArchiveUnlock ? 800 : 0);
                 }}
                 className={`w-full rounded-2xl border p-4 text-left transition-all duration-300 ${
