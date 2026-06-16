@@ -27,7 +27,6 @@ export default async function AccountPage({
     redirect("/auth/connexion?redirect=/account");
   }
 
-  // Récupérer le statut premium
   const { data: entitlement } = await supabase
     .from("user_entitlements")
     .select("has_premium, premium_since")
@@ -48,7 +47,6 @@ export default async function AccountPage({
       className="mx-auto flex min-h-screen max-w-lg flex-col px-6 py-16"
       style={{ color: "var(--foreground)" }}
     >
-      {/* En-tête */}
       <div className="mb-10">
         <Link
           href="/"
@@ -64,7 +62,6 @@ export default async function AccountPage({
         </h1>
       </div>
 
-      {/* Message flash */}
       {message && (
         <div
           className="mb-6 rounded-xl px-4 py-3 text-sm"
@@ -79,7 +76,6 @@ export default async function AccountPage({
 
       <div className="flex flex-col gap-5">
 
-        {/* Carte infos */}
         <div
           className="rounded-2xl p-6 space-y-4"
           style={{
@@ -106,7 +102,6 @@ export default async function AccountPage({
           </div>
         </div>
 
-        {/* Carte statut premium */}
         <div
           className="rounded-2xl p-6"
           style={{
@@ -137,9 +132,7 @@ export default async function AccountPage({
 
           {hasPremium ? (
             <div className="space-y-2">
-              <p className="text-sm">
-                ✓ Accès complet à tous les chapitres
-              </p>
+              <p className="text-sm">✓ Accès complet à tous les chapitres</p>
               {premiumSince && (
                 <p className="text-xs opacity-40">Activé le {premiumSince}</p>
               )}
@@ -163,7 +156,6 @@ export default async function AccountPage({
           )}
         </div>
 
-        {/* Actions */}
         <div
           className="rounded-2xl p-6 space-y-3"
           style={{
@@ -176,7 +168,7 @@ export default async function AccountPage({
           </h2>
 
           <Link
-            href="/lire"
+            href="/read/1/1.1.1"
             className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all hover:opacity-70"
             style={{ border: "1px solid rgba(128,128,128,0.15)" }}
           >
