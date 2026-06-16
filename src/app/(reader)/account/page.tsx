@@ -1,116 +1,12 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/src/lib/supabase/server";
-import DeleteAccountButton from "./DeleteAccountButton";
-
-async function signInWithGoogle() {
-  "use server";
-
-  const supabase = await createClient();
-
-  const { data } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: "http://localhost:3000/auth/callback?next=/account",
-    },
-  });
-
-  if (data.url) {
-    redirect(data.url);
-  }
-}
-
-async function signUp(formData: FormData) {
-  "use server";
-
-  const email = String(formData.get("email") ?? "");
-  const password = String(formData.get("password") ?? "");
-
-  const supabase = await createClient();
-
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: "http://localhost:3000/auth/callback?next=/account",
-    },
-  });
-
-  if (error) {
-    redirect(`/account?message=${encodeURIComponent(error.message)}`);
-  }
-
-  if (data.user) {
-    await supabase.from("profiles").upsert({
-      id: data.user.id,
-      email: data.user.email,
-      updated_at: new Date().toISOString(),
-    });
-  }
-
-  redirect(
-    "/account?message=" +
-      encodeURIComponent("Merci, vérifie ton adresse mail pour activer ton compte.")
-  );
-}
-
-async function signIn(formData: FormData) {
-  "use server";
-
-  const email = String(formData.get("email") ?? "");
-  const password = String(formData.get("password") ?? "");
-
-  const supabase = await createClient();
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
-    redirect(`/account?message=${encodeURIComponent(error.message)}`);
-  }
-
-  redirect("/account");
-}
 
 async function signOut() {
   "use server";
-
   const supabase = await createClient();
   await supabase.auth.signOut({ scope: "local" });
-  redirect("/account?message=" + encodeURIComponent("Tu es déconnecté."));
-}
-
-async function updateProfile(formData: FormData) {
-  "use server";
-
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/account?message=" + encodeURIComponent("Session expirée."));
-  }
-
-  const fullName = String(formData.get("full_name") ?? "").trim();
-  const avatarUrl = String(formData.get("avatar_url") ?? "").trim();
-
-  const { error } = await supabase.from("profiles").upsert({
-    id: user.id,
-    email: user.email,
-    full_name: fullName || null,
-    avatar_url: avatarUrl || null,
-    updated_at: new Date().toISOString(),
-  });
-
-  if (error) {
-    redirect(`/account?message=${encodeURIComponent(error.message)}`);
-  }
-
-  redirect("/account?message=" + encodeURIComponent("Profil mis à jour."));
+  redirect("/");
 }
 
 export default async function AccountPage({
@@ -127,170 +23,182 @@ export default async function AccountPage({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const profile = user
-    ? await supabase
-        .from("profiles")
-        .select("full_name, avatar_url")
-        .eq("id", user.id)
-        .maybeSingle()
+  if (!user) {
+    redirect("/auth/connexion?redirect=/account");
+  }
+
+  // Récupérer le statut premium
+  const { data: entitlement } = await supabase
+    .from("user_entitlements")
+    .select("has_premium, premium_since")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  const hasPremium = entitlement?.has_premium ?? false;
+  const premiumSince = entitlement?.premium_since
+    ? new Date(entitlement.premium_since).toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
     : null;
 
-  const fullName = profile?.data?.full_name ?? "";
-  const avatarUrl = profile?.data?.avatar_url ?? "";
-
   return (
-    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 px-6 py-16">
-      <h1 className="text-3xl font-semibold">Compte</h1>
+    <main
+      className="mx-auto flex min-h-screen max-w-lg flex-col px-6 py-16"
+      style={{ color: "var(--foreground)" }}
+    >
+      {/* En-tête */}
+      <div className="mb-10">
+        <Link
+          href="/"
+          className="mb-8 inline-block text-sm opacity-40 hover:opacity-70 transition-opacity"
+        >
+          ← Accueil
+        </Link>
+        <h1
+          className="text-3xl font-bold"
+          style={{ fontFamily: "var(--font-merriweather)" }}
+        >
+          Mon compte
+        </h1>
+      </div>
 
-      {message ? (
-        <p className="rounded-xl border border-black/10 bg-black/5 px-4 py-3 text-sm text-black/70 dark:border-white/10 dark:bg-white/5 dark:text-white/80">
+      {/* Message flash */}
+      {message && (
+        <div
+          className="mb-6 rounded-xl px-4 py-3 text-sm"
+          style={{
+            backgroundColor: "rgba(224,159,62,0.1)",
+            color: "var(--accent-neon)",
+          }}
+        >
           {message}
-        </p>
-      ) : null}
+        </div>
+      )}
 
-      {user ? (
-        <>
-          <div className="space-y-4 rounded-2xl border border-black/10 bg-white/40 p-6 dark:border-white/10 dark:bg-white/[0.03]">
-            <div className="space-y-1">
-              <p className="text-sm text-black/60 dark:text-white/60">Email</p>
-              <p>{user.email}</p>
-            </div>
+      <div className="flex flex-col gap-5">
 
-            <div className="space-y-1">
-              <p className="text-sm text-black/60 dark:text-white/60">Nom affiché</p>
-              <p>{fullName || "Non renseigné"}</p>
-            </div>
+        {/* Carte infos */}
+        <div
+          className="rounded-2xl p-6 space-y-4"
+          style={{
+            border: "1px solid rgba(128,128,128,0.15)",
+            backgroundColor: "rgba(128,128,128,0.04)",
+          }}
+        >
+          <h2 className="text-xs font-bold uppercase tracking-widest opacity-40">
+            Informations
+          </h2>
+          <div>
+            <p className="text-xs opacity-40 mb-1">Email</p>
+            <p className="text-sm">{user.email}</p>
+          </div>
+          <div>
+            <p className="text-xs opacity-40 mb-1">Membre depuis</p>
+            <p className="text-sm">
+              {new Date(user.created_at).toLocaleDateString("fr-FR", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </p>
+          </div>
+        </div>
 
-            <div className="space-y-1">
-              <p className="text-sm text-black/60 dark:text-white/60">Avatar URL</p>
-              <p className="break-all">{avatarUrl || "Non renseigné"}</p>
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/private"
-                className="rounded-full border border-black/10 px-4 py-2 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5"
-              >
-                Aller à la page privée
-              </Link>
-
-              <Link
-                href="/private/settings"
-                className="rounded-full border border-black/10 px-4 py-2 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5"
-              >
-                Réglages privés
-              </Link>
-
-              <form action={signOut}>
-                <button
-                  type="submit"
-                  className="rounded-full bg-black px-4 py-2 text-white dark:bg-white dark:text-black"
-                >
-                  Se déconnecter
-                    
-                </button>
-                
-              </form>
-              <DeleteAccountButton />
-            </div>
+        {/* Carte statut premium */}
+        <div
+          className="rounded-2xl p-6"
+          style={{
+            border: hasPremium
+              ? "1px solid rgba(224,159,62,0.4)"
+              : "1px solid rgba(128,128,128,0.15)",
+            backgroundColor: hasPremium
+              ? "rgba(224,159,62,0.06)"
+              : "rgba(128,128,128,0.04)",
+          }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xs font-bold uppercase tracking-widest opacity-40">
+              Accès
+            </h2>
+            <span
+              className="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
+              style={{
+                backgroundColor: hasPremium
+                  ? "var(--accent-neon)"
+                  : "rgba(128,128,128,0.15)",
+                color: hasPremium ? "#0d1317" : "inherit",
+              }}
+            >
+              {hasPremium ? "Premium" : "Gratuit"}
+            </span>
           </div>
 
-          <form
-            action={updateProfile}
-            className="space-y-3 rounded-2xl border border-black/10 bg-white/40 p-6 dark:border-white/10 dark:bg-white/[0.03]"
+          {hasPremium ? (
+            <div className="space-y-2">
+              <p className="text-sm">
+                ✓ Accès complet à tous les chapitres
+              </p>
+              {premiumSince && (
+                <p className="text-xs opacity-40">Activé le {premiumSince}</p>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <p className="text-sm opacity-60">
+                Tu as accès aux chapitres 1 à 3 gratuitement.
+              </p>
+              <Link
+                href="/abonnement"
+                className="inline-block rounded-full px-5 py-2 text-sm font-semibold uppercase tracking-widest transition-opacity hover:opacity-80"
+                style={{
+                  backgroundColor: "var(--accent-neon)",
+                  color: "#0d1317",
+                }}
+              >
+                Débloquer l’accès complet
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Actions */}
+        <div
+          className="rounded-2xl p-6 space-y-3"
+          style={{
+            border: "1px solid rgba(128,128,128,0.15)",
+            backgroundColor: "rgba(128,128,128,0.04)",
+          }}
+        >
+          <h2 className="text-xs font-bold uppercase tracking-widest opacity-40 mb-4">
+            Actions
+          </h2>
+
+          <Link
+            href="/lire"
+            className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all hover:opacity-70"
+            style={{ border: "1px solid rgba(128,128,128,0.15)" }}
           >
-            <h2 className="text-xl font-medium">Mettre à jour le profil</h2>
+            <span>Reprendre la lecture</span>
+            <span className="ml-auto opacity-40">→</span>
+          </Link>
 
-            <input
-              name="full_name"
-              type="text"
-              placeholder="Nom affiché"
-              defaultValue={fullName}
-              className="w-full rounded-xl border border-black/10 bg-transparent px-4 py-3 dark:border-white/10"
-            />
-
-            <input
-              name="avatar_url"
-              type="url"
-              placeholder="https://..."
-              defaultValue={avatarUrl}
-              className="w-full rounded-xl border border-black/10 bg-transparent px-4 py-3 dark:border-white/10"
-            />
-
+          <form action={signOut}>
             <button
               type="submit"
-              className="rounded-full bg-black px-4 py-2 text-white dark:bg-white dark:text-black"
+              className="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all hover:opacity-70 text-left"
+              style={{
+                border: "1px solid rgba(158,42,43,0.3)",
+                color: "var(--accent-blood)",
+              }}
             >
-              Enregistrer le profil
+              Se déconnecter
             </button>
           </form>
-        </>
-      ) : (
-        <>
-          <form action={signInWithGoogle}>
-            <button
-              type="submit"
-              className="w-full rounded-full border border-black/10 px-5 py-3 hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/5"
-            >
-              Continuer avec Google
-            </button>
-          </form>
+        </div>
 
-          <form
-            action={signIn}
-            className="space-y-3 rounded-2xl border border-black/10 bg-white/40 p-6 dark:border-white/10 dark:bg-white/[0.03]"
-          >
-            <h2 className="text-xl font-medium">Connexion</h2>
-            <input
-              name="email"
-              type="email"
-              placeholder="Email"
-              required
-              className="w-full rounded-xl border border-black/10 bg-transparent px-4 py-3 dark:border-white/10"
-            />
-            <input
-              name="password"
-              type="password"
-              placeholder="Mot de passe"
-              required
-              className="w-full rounded-xl border border-black/10 bg-transparent px-4 py-3 dark:border-white/10"
-            />
-            <button
-              type="submit"
-              className="rounded-full bg-black px-4 py-2 text-white dark:bg-white dark:text-black"
-            >
-              Se connecter
-            </button>
-          </form>
-
-          <form
-            action={signUp}
-            className="space-y-3 rounded-2xl border border-black/10 bg-white/40 p-6 dark:border-white/10 dark:bg-white/[0.03]"
-          >
-            <h2 className="text-xl font-medium">Créer un compte</h2>
-            <input
-              name="email"
-              type="email"
-              placeholder="Email"
-              required
-              className="w-full rounded-xl border border-black/10 bg-transparent px-4 py-3 dark:border-white/10"
-            />
-            <input
-              name="password"
-              type="password"
-              placeholder="Mot de passe"
-              required
-              className="w-full rounded-xl border border-black/10 bg-transparent px-4 py-3 dark:border-white/10"
-            />
-            <button
-              type="submit"
-              className="rounded-full bg-black px-4 py-2 text-white dark:bg-white dark:text-black"
-            >
-              Créer un compte
-            </button>
-          </form>
-        </>
-      )}
+      </div>
     </main>
   );
 }
