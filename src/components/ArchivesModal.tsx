@@ -25,7 +25,7 @@ const ARCHIVES_DB: Record<
     image: "ThomasBureau",
     details: [
       "Employé depuis 8 ans au pôle supervision.",
-      "Profil psychologique : méthodique, tendance à l’isolement en situation de crise.",
+      "Profil psychologique : méthodique, tendance à l'isolement en situation de crise.",
     ],
   },
   samirdossier: {
@@ -60,7 +60,7 @@ const ARCHIVES_DB: Record<
     tag: "RISQUE",
     image: "serveur_n4_rules",
     details: [
-      "Contient des règles d’alerte et seuils de déclenchement.",
+      "Contient des règles d'alerte et seuils de déclenchement.",
       "Peut révéler les angles morts du système.",
     ],
   },
@@ -80,7 +80,7 @@ const CHARACTER_DB = [
     status: "Sous tension",
     image: "char_thomas",
     relation: "Conscience interne du récit.",
-    details: "Méthodique, fatigué, déjà légèrement en décalage avec l’institution.",
+    details: "Méthodique, fatigué, déjà légèrement en décalage avec l'institution.",
   },
   {
     id: "samir",
@@ -139,12 +139,9 @@ function formatGaugeDelta(key: string, value?: number) {
   if (!value) return null;
 
   const labels: Record<string, string> = {
-    alerte: "Alerte",
-    charge: "Charge",
-    integrite: "Intégrité",
-    preparation: "Préparation",
-    discretion: "Discrétion",
-    cohesion: "Cohésion",
+    dette: "Dette",
+    ancrage: "Ancrage",
+    humanite: "Humanité",
   };
 
   return `${value > 0 ? "+" : ""}${value} ${labels[key] ?? key}`;
@@ -333,7 +330,7 @@ export default function ArchivesModal({
                             Tableau de bord NW-7
                           </div>
                           <h3 className="mt-1 text-lg font-semibold text-neutral-950 dark:text-white">
-                            Incident en cours d’analyse
+                            Incident en cours d'analyse
                           </h3>
                         </div>
 
@@ -343,14 +340,11 @@ export default function ArchivesModal({
                       </div>
 
                       <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-                        {[
-                          ["Alerte", gauges.alerte],
-                          ["Charge", gauges.charge],
-                          ["Intégrité", gauges.integrite],
-                          ["Préparation", gauges.preparation],
-                          ["Discrétion", gauges.discretion],
-                          ["Cohésion", gauges.cohesion],
-                        ].map(([label, value]) => (
+                        {([
+                          ["Dette", gauges.dette],
+                          ["Ancrage", gauges.ancrage],
+                          ["Humanité", gauges.humanite],
+                        ] as [string, number][]).map(([label, value]) => (
                           <div
                             key={label}
                             className="rounded-xl border border-black/10 bg-black/[0.03] p-3 dark:border-white/10 dark:bg-black/20"
@@ -358,7 +352,7 @@ export default function ArchivesModal({
                             <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-neutral-500">
                               {label}
                             </div>
-                            <div className={`mt-2 text-2xl font-semibold ${gaugeTone(Number(value))}`}>
+                            <div className={`mt-2 text-2xl font-semibold ${gaugeTone(value)}`}>
                               {value}%
                             </div>
                           </div>
