@@ -4,9 +4,9 @@ import type { GaugeEffects } from "@/src/types/narrative";
 import { getMentalStateConfig } from "@/mentalStateConfig";
 
 export interface GaugeState {
-  dette: number;      // ex: commence à 80 (forte pression)
-  ancrage: number;    // ex: commence à 100 (esprit sain)
-  humanite: number;   // ex: 50 (neutre)
+  dette: number;
+  ancrage: number;
+  humanite: number;
 }
 
 export type MentalState =
@@ -15,7 +15,7 @@ export type MentalState =
   | "visionnaire"
   | "pression"
   | "fracture"
-  | "stable"
+  | "stable";
 
 export interface ChoiceHistoryEntry {
   choiceId: string;
@@ -58,6 +58,7 @@ export interface GameState {
   addChoiceToHistory: (entry: ChoiceHistoryEntry) => void;
   clearLastEffects: () => void;
   resetGame: () => void;
+  resetChapter: (chapterNumber: number) => void;
   updateSettings: (newSettings: Partial<GameState["settings"]>) => void;
   setCurrentUnitId: (unitId: string) => void;
   addArchives: (archiveIds: string[]) => void;
@@ -84,26 +85,12 @@ function clampGauge(value: number) {
 
 function computeMentalState(gauges: GaugeState): MentalState {
   const { ancrage } = gauges;
-
-  
-  if (ancrage < 10 ) {
-    return "visionnaire";
-  }
-
-  if (ancrage < 30 ) {
-    return "visionnaire";
-  }
-
-  if (ancrage < 50 ) {
-    return "tourmente";
-  }
-
-  if (ancrage <= 80 ) {
-    return "stable";
-  }
-
+  if (ancrage < 10) return "visionnaire";
+  if (ancrage < 30) return "visionnaire";
+  if (ancrage < 50) return "tourmente";
+  if (ancrage <= 80) return "stable";
   return "lucide";
-  };
+}
 
 function getQuickNoteFromMentalState(state: MentalState): string {
   return getMentalStateConfig(state).quickNote;
@@ -144,9 +131,7 @@ export const useGameStore = create<GameState>()(
 
       applyChoice: (effects, newArchive, choiceId) =>
         set((state) => {
-          if (choiceId && state.madeChoices.includes(choiceId)) {
-            return state;
-          }
+          if (choiceId && state.madeChoices.includes(choiceId)) return state;
 
           const updatedArchives =
             newArchive && !state.archives.includes(newArchive)
@@ -180,7 +165,6 @@ export const useGameStore = create<GameState>()(
         set((state) => {
           const fresh = archiveIds.filter((id) => !state.archives.includes(id));
           if (fresh.length === 0) return state;
-
           return {
             archives: [...state.archives, ...fresh],
             newArchives: [...state.newArchives, ...fresh],
@@ -191,7 +175,6 @@ export const useGameStore = create<GameState>()(
         set((state) => {
           const fresh = characterIds.filter((id) => !state.unlockedCharacters.includes(id));
           if (fresh.length === 0) return state;
-
           return {
             unlockedCharacters: [...state.unlockedCharacters, ...fresh],
             newCharacters: [...state.newCharacters, ...fresh],
@@ -215,6 +198,7 @@ export const useGameStore = create<GameState>()(
 
       clearLastEffects: () => set({ lastEffects: null }),
 
+      // Efface tous les choix et remet les jauges à zéro
       resetGame: () =>
         set((state) => ({
           unlockedCharacters: [],
@@ -231,6 +215,30 @@ export const useGameStore = create<GameState>()(
           chosenPathByUnit: {},
           settings: state.settings,
         })),
+
+      // Efface uniquement les choix des unités du chapitre donné
+      resetChapter: (chapterNumber: number) =>
+        set((state) => {
+          const prefix = `${chapterNumber}.`;
+          const filteredPaths = Object.fromEntries(
+            Object.entries(state.chosenPathByUnit).filter(
+              ([unitId]) => !unitId.startsWith(prefix)
+            )
+          );
+          const filteredHistory = state.choiceHistory.filter(
+            (e) => e.chapterNumber !== chapterNumber
+          );
+          const filteredMadeChoices = state.madeChoices.filter(
+            (id) => !state.choiceHistory.some(
+              (e) => e.chapterNumber === chapterNumber && e.choiceId === id
+            )
+          );
+          return {
+            chosenPathByUnit: filteredPaths,
+            choiceHistory: filteredHistory,
+            madeChoices: filteredMadeChoices,
+          };
+        }),
     }),
     {
       name: "game-storage",

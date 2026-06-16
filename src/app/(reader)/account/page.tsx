@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/src/lib/supabase/server";
+import RestartButtons from "./RestartButtons";
 
 async function signOut() {
   "use server";
@@ -52,12 +53,15 @@ export default async function AccountPage({
     ? `/read/${progress.chapter}/${progress.unit_number}`
     : "/read/1/1.1.1";
 
-  // Première scène de chaque chapitre
   const chapterStarts: Record<number, string> = {
     1: "1.1.1",
     2: "2.1.1",
     3: "3.1.1",
   };
+
+  const chapterStartUrl = progress
+    ? `/read/${progress.chapter}/${chapterStarts[progress.chapter] ?? "1.1.1"}`
+    : "/read/1/1.1.1";
 
   return (
     <main
@@ -82,10 +86,7 @@ export default async function AccountPage({
       {message && (
         <div
           className="mb-6 rounded-xl px-4 py-3 text-sm"
-          style={{
-            backgroundColor: "rgba(224,159,62,0.1)",
-            color: "var(--accent-neon)",
-          }}
+          style={{ backgroundColor: "rgba(224,159,62,0.1)", color: "var(--accent-neon)" }}
         >
           {message}
         </div>
@@ -96,14 +97,9 @@ export default async function AccountPage({
         {/* Informations */}
         <div
           className="rounded-2xl p-6 space-y-4"
-          style={{
-            border: "1px solid rgba(128,128,128,0.15)",
-            backgroundColor: "rgba(128,128,128,0.04)",
-          }}
+          style={{ border: "1px solid rgba(128,128,128,0.15)", backgroundColor: "rgba(128,128,128,0.04)" }}
         >
-          <h2 className="text-xs font-bold uppercase tracking-widest opacity-40">
-            Informations
-          </h2>
+          <h2 className="text-xs font-bold uppercase tracking-widest opacity-40">Informations</h2>
           <div>
             <p className="text-xs opacity-40 mb-1">Email</p>
             <p className="text-sm">{user.email}</p>
@@ -112,9 +108,7 @@ export default async function AccountPage({
             <p className="text-xs opacity-40 mb-1">Membre depuis</p>
             <p className="text-sm">
               {new Date(user.created_at).toLocaleDateString("fr-FR", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
+                day: "numeric", month: "long", year: "numeric",
               })}
             </p>
           </div>
@@ -124,12 +118,8 @@ export default async function AccountPage({
         <div
           className="rounded-2xl p-6"
           style={{
-            border: hasPremium
-              ? "1px solid rgba(224,159,62,0.4)"
-              : "1px solid rgba(128,128,128,0.15)",
-            backgroundColor: hasPremium
-              ? "rgba(224,159,62,0.06)"
-              : "rgba(128,128,128,0.04)",
+            border: hasPremium ? "1px solid rgba(224,159,62,0.4)" : "1px solid rgba(128,128,128,0.15)",
+            backgroundColor: hasPremium ? "rgba(224,159,62,0.06)" : "rgba(128,128,128,0.04)",
           }}
         >
           <div className="flex items-center justify-between mb-4">
@@ -147,9 +137,7 @@ export default async function AccountPage({
           {hasPremium ? (
             <div className="space-y-2">
               <p className="text-sm">✓ Accès complet à tous les chapitres</p>
-              {premiumSince && (
-                <p className="text-xs opacity-40">Activé le {premiumSince}</p>
-              )}
+              {premiumSince && <p className="text-xs opacity-40">Activé le {premiumSince}</p>}
             </div>
           ) : (
             <div className="space-y-4">
@@ -165,80 +153,30 @@ export default async function AccountPage({
           )}
         </div>
 
-        {/* Lecture */}
+        {/* Lecture — boutons client avec reset store */}
         <div
           className="rounded-2xl p-6 space-y-3"
-          style={{
-            border: "1px solid rgba(128,128,128,0.15)",
-            backgroundColor: "rgba(128,128,128,0.04)",
-          }}
+          style={{ border: "1px solid rgba(128,128,128,0.15)", backgroundColor: "rgba(128,128,128,0.04)" }}
         >
           <h2 className="text-xs font-bold uppercase tracking-widest opacity-40 mb-4">Lecture</h2>
-
-          {/* Continuer / Commencer */}
-          <Link
-            href={resumeUrl}
-            className="flex flex-col gap-1 rounded-xl px-4 py-3 text-sm transition-all hover:opacity-70"
-            style={{ border: "1px solid rgba(128,128,128,0.15)" }}
-          >
-            <div className="flex items-center justify-between">
-              <span>{progress ? "Continuer la lecture" : "Commencer la lecture"}</span>
-              <span className="opacity-40">→</span>
-            </div>
-            {progress && (
-              <span className="text-xs opacity-40">
-                Chapitre {progress.chapter} · Scène {progress.unit_number}
-              </span>
-            )}
-          </Link>
-
-          {/* Reprendre depuis le début du chapitre en cours */}
-          {progress && (
-            <Link
-              href={`/read/${progress.chapter}/${chapterStarts[progress.chapter] ?? "1.1.1"}`}
-              className="flex flex-col gap-1 rounded-xl px-4 py-3 text-sm transition-all hover:opacity-70"
-              style={{ border: "1px solid rgba(128,128,128,0.15)" }}
-            >
-              <div className="flex items-center justify-between">
-                <span>Reprendre depuis le début du chapitre {progress.chapter}</span>
-                <span className="opacity-40">→</span>
-              </div>
-              <span className="text-xs opacity-40">Repart de la scène {chapterStarts[progress.chapter] ?? "1.1.1"}</span>
-            </Link>
-          )}
-
-          {/* Recommencer depuis le début */}
-          {progress && (
-            <Link
-              href="/read/1/1.1.1"
-              className="flex flex-col gap-1 rounded-xl px-4 py-3 text-sm transition-all hover:opacity-70"
-              style={{ border: "1px solid rgba(128,128,128,0.15)" }}
-            >
-              <div className="flex items-center justify-between">
-                <span>Recommencer depuis le début</span>
-                <span className="opacity-40">→</span>
-              </div>
-              <span className="text-xs opacity-40">Chapitre 1 · Scène 1.1.1</span>
-            </Link>
-          )}
+          <RestartButtons
+            progress={progress ?? null}
+            resumeUrl={resumeUrl}
+            chapterStartUrl={chapterStartUrl}
+            currentChapter={progress?.chapter ?? 1}
+          />
         </div>
 
         {/* Déconnexion */}
         <div
           className="rounded-2xl p-6"
-          style={{
-            border: "1px solid rgba(128,128,128,0.15)",
-            backgroundColor: "rgba(128,128,128,0.04)",
-          }}
+          style={{ border: "1px solid rgba(128,128,128,0.15)", backgroundColor: "rgba(128,128,128,0.04)" }}
         >
           <form action={signOut}>
             <button
               type="submit"
               className="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all hover:opacity-70 text-left"
-              style={{
-                border: "1px solid rgba(158,42,43,0.3)",
-                color: "var(--accent-blood)",
-              }}
+              style={{ border: "1px solid rgba(158,42,43,0.3)", color: "var(--accent-blood)" }}
             >
               Se déconnecter
             </button>
