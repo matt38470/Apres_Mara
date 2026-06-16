@@ -5,67 +5,103 @@ import Link from "next/link";
 
 export default function CoverPage() {
   return (
-    <div className="relative flex min-h-screen flex-col overflow-hidden bg-background text-foreground selection:bg-orange-500/30">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-white/90 via-white/55 to-white/10 dark:from-[#050505] dark:via-[#0a0a0a]/75 dark:to-transparent" />
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-neutral-950 text-white selection:bg-amber-500/30">
 
+      {/* Fond atmosphérique — ruelle pavée sous la pluie */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-neutral-950 via-neutral-950/70 to-neutral-950/30" />
         <img
-          src="/images/scenes/scene_thomas_Bureau.jpg"
-          alt="L'Effondrement - Ambiance"
-          className="h-full w-full scale-105 object-cover opacity-30 blur-[2px] dark:opacity-40"
+          src="https://picsum.photos/seed/santelmo-noir/1400/900"
+          alt=""
+          aria-hidden="true"
+          width="1400"
+          height="900"
+          loading="eager"
+          className="h-full w-full object-cover opacity-25 blur-[1px] saturate-0"
         />
       </div>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-4xl flex-grow flex-col items-center justify-center px-6 py-12 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+      <main className="relative z-10 mx-auto flex w-full max-w-3xl flex-grow flex-col items-start justify-center px-6 py-16 md:px-10">
+
+        {/* Surtitre */}
+        <motion.span
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="mb-10 w-full"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mb-6 block text-xs font-bold uppercase tracking-[0.45em] text-amber-500"
         >
-          <span className="mb-8 block text-sm font-bold uppercase tracking-[0.4em] text-orange-600 dark:text-orange-400">
-            Mathieu Briat
-          </span>
+          Roman interactif &nbsp;·&nbsp; Tome 1
+        </motion.span>
 
-          <h1 className="mb-10 text-5xl font-bold leading-none tracking-tighter text-neutral-950 drop-shadow-2xl md:text-8xl dark:text-white">
-            L'EFFONDREMENT
-          </h1>
+        {/* Titre */}
+        <motion.h1
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.15 }}
+          className="mb-10 text-6xl font-bold leading-none tracking-tight text-white md:text-8xl"
+        >
+          Le Cartel
+          <br />
+          <span className="text-amber-400">des Âmes</span>
+        </motion.h1>
 
-          <div className="mx-auto max-w-2xl space-y-6 text-left">
-            <p className="text-xl font-light leading-relaxed text-neutral-700 dark:text-gray-300">
-              Le graphique est apparu à 14h37 sur les écrans du secteur nord-est.
-              Pas un pic brutal ni une alarme stridente. Juste une dérive lente et
-              silencieuse depuis dix-huit mois, ignorée des algorithmes.
-            </p>
+        {/* Accroche */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: "easeOut", delay: 0.35 }}
+          className="mb-12 max-w-xl space-y-5"
+        >
+          <p className="text-lg font-light leading-relaxed text-neutral-300">
+            San Telmo, quelque part dans un futur proche. Mourir n'est plus
+            le pire qui puisse vous arriver — c'est devenir{" "}
+            <span className="font-semibold text-white">remplaçable</span>.
+          </p>
 
-            <p className="text-xl font-light leading-relaxed text-neutral-700 dark:text-gray-300">
-              Vous êtes Thomas, analyste au sein du centre de supervision régional.
-              Face à cette anomalie nommée{" "}
-              <span className="font-semibold text-neutral-950 dark:text-white">NW-7</span>,
-              vous êtes le premier à comprendre la logique mathématique du désastre à venir.
-            </p>
+          <p className="text-lg font-light leading-relaxed text-neutral-300">
+            Votre conjoint(e) est en stase. Le cartel attend son dû.
+            Une enquête sur un vol de corps dans les bas-fonds de la ville
+            va vous révéler que certaines âmes s'arrachent encore vivantes —
+            et que quelqu'un que vous aimez en sait beaucoup trop.
+          </p>
 
-            <p className="text-xl font-light italic leading-relaxed text-neutral-700 dark:text-gray-300">
-              Dans un monde de procédures qui refuse de voir le pire, ferez-vous sonner
-              l'alerte au risque d'être broyé par l'institution ? Ou préparerez-vous
-              votre propre survie dans le silence ?
-            </p>
-          </div>
+          <p className="text-lg font-light italic leading-relaxed text-neutral-400">
+            Corruption, dette, loyauté. Jusqu'où irez-vous
+            pour garder les vôtres en vie ?
+          </p>
         </motion.div>
 
+        {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="mt-8"
+          transition={{ duration: 0.7, delay: 0.7 }}
+          className="flex flex-col gap-4 sm:flex-row sm:items-center"
         >
           <Link
-            href="/regles"
-            className="inline-flex items-center justify-center rounded-full bg-orange-600 px-12 py-4 font-semibold uppercase tracking-widest text-white shadow-lg transition-colors hover:bg-orange-500"
+            href="/lire"
+            className="inline-flex items-center justify-center rounded-full bg-amber-500 px-10 py-4 text-sm font-bold uppercase tracking-widest text-neutral-950 shadow-lg transition-colors hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
           >
-            Ouvrir le dossier
+            Commencer l'enquête
+          </Link>
+          <Link
+            href="/regles"
+            className="inline-flex items-center justify-center rounded-full border border-white/20 px-10 py-4 text-sm font-semibold uppercase tracking-widest text-neutral-300 transition-colors hover:border-white/50 hover:text-white"
+          >
+            Comment jouer
           </Link>
         </motion.div>
+
+        {/* Indicateur chapitres gratuits */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.1 }}
+          className="mt-8 text-xs font-medium tracking-widest text-neutral-500 uppercase"
+        >
+          3 chapitres gratuits &nbsp;·&nbsp; Chapitres 4–10 sur abonnement
+        </motion.p>
+
       </main>
     </div>
   );
