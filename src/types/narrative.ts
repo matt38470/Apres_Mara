@@ -69,7 +69,7 @@ export type NarrativeUnit = {
   location: string;
   timeLabel: string;
   accessLevel: AccessLevel;
-  countdownVisible: boolean;
+  countdownVisible?: boolean;
   countdownLabel?: string;
   textBlocks: string[];
   imagePrompt?: string;
