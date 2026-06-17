@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGameStore } from "@/src/store/gameStore";
 
-// ─── Catalogue des 10 chapitres ────────────────────────────────────────────────
+// ─── Catalogue des 10 chapitres ─────────────────────────────────────────────
 const CHAPTERS = [
   {
     number: 1,
@@ -96,7 +96,6 @@ function useChapterStatuses() {
   const { currentUnitId, choiceHistory } = useGameStore();
 
   return useMemo(() => {
-    // currentUnitId = "2.3.1" → chapitre en cours = 2
     const currentChapter = parseInt(currentUnitId.split(".")[0], 10) || 1;
     const startedChapters = new Set(choiceHistory.map((e) => e.chapterNumber));
 
@@ -105,12 +104,15 @@ function useChapterStatuses() {
 
       if (ch.number < currentChapter) return { ...ch, status: "done" as ChapterStatus };
       if (ch.number === currentChapter) {
-        // Si on est au début du chapitre ET aucune décision prise → available
         const hasStarted = startedChapters.has(ch.number);
         const isAtVeryStart = currentUnitId === ch.firstUnit && !hasStarted;
-        return { ...ch, status: isAtVeryStart ? ("available" as ChapterStatus) : ("in-progress" as ChapterStatus) };
+        return {
+          ...ch,
+          status: isAtVeryStart
+            ? ("available" as ChapterStatus)
+            : ("in-progress" as ChapterStatus),
+        };
       }
-      // Chapitres free suivants non encore atteints
       return { ...ch, status: "available" as ChapterStatus };
     });
   }, [currentUnitId, choiceHistory]);
@@ -148,7 +150,10 @@ const STATUS_CONFIG = {
     btnClass:
       "border border-amber-500/40 bg-amber-500/5 text-amber-600 hover:bg-amber-500/10 dark:text-amber-400 dark:hover:bg-amber-500/10",
   },
-} satisfies Record<ChapterStatus, { badge: string | null; badgeClass: string; btnLabel: string; btnClass: string }>;
+} satisfies Record<
+  ChapterStatus,
+  { badge: string | null; badgeClass: string; btnLabel: string; btnClass: string }
+>;
 
 export default function LibraryPage() {
   const router = useRouter();
@@ -160,14 +165,13 @@ export default function LibraryPage() {
 
   function handleChapterAction(ch: (typeof chapters)[number]) {
     if (ch.status === "locked") {
-      router.push("/acheter");
+      router.push("/abonnement");
       return;
     }
     if (ch.status === "done") {
       router.push(`/read/${ch.number}/${ch.firstUnit}`);
       return;
     }
-    // available ou in-progress
     if (ch.status === "in-progress") {
       router.push(`/read/${resumeChapter}/${resumeUnit}`);
     } else {
@@ -198,7 +202,7 @@ export default function LibraryPage() {
       </header>
 
       <main className="mx-auto max-w-3xl px-5 py-8 md:px-6">
-        {/* Bouton Reprendre visible en haut */}
+        {/* Bandeau Reprendre */}
         <div className="mb-8 flex items-center gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 dark:border-amber-500/20 dark:bg-amber-500/[0.04]">
           <div className="flex-1">
             <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400">
@@ -255,9 +259,7 @@ export default function LibraryPage() {
                     </span>
                     {cfg.badge && (
                       <span
-                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] ${
-                          cfg.badgeClass
-                        }`}
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] ${cfg.badgeClass}`}
                       >
                         {cfg.badge}
                       </span>
@@ -277,9 +279,7 @@ export default function LibraryPage() {
                 <button
                   type="button"
                   onClick={() => handleChapterAction(ch)}
-                  className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition ${
-                    cfg.btnClass
-                  }`}
+                  className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition ${cfg.btnClass}`}
                 >
                   {cfg.btnLabel}
                 </button>
@@ -302,7 +302,7 @@ export default function LibraryPage() {
             Un abonnement unique pour suivre Vance jusqu'au bout de sa nuit — et de ses choix.
           </p>
           <Link
-            href="/acheter"
+            href="/abonnement"
             className="mt-5 inline-block rounded-full bg-amber-500 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-md transition hover:bg-amber-600"
           >
             Voir l'abonnement
