@@ -13,7 +13,7 @@ const FEATURES_FREE = [
 
 const FEATURES_PREMIUM = [
   "Chapitres 1 à 3 inclus",
-  "Accès aux chapitres 4, 5, 6…",
+  "Accès aux chapitres 4 à 10",
   "Tous les embranchements narratifs",
   "Archives et documents secrets",
   "Sauvegardes automatiques",
@@ -58,13 +58,19 @@ export default function AbonnementContent() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-hidden bg-background text-foreground">
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-neutral-950 text-white selection:bg-amber-500/30">
+
+      {/* Fond — même ambiance que la page d'accueil */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-white/95 via-white/70 to-white/20 dark:from-[#050505] dark:via-[#0a0a0a]/80 dark:to-transparent" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-neutral-950 via-neutral-950/70 to-neutral-950/30" />
         <img
-          src="/images/scenes/scene_thomas_Bureau.jpg"
-          alt="Ambiance Après Mara"
-          className="h-full w-full scale-105 object-cover opacity-20 blur-[3px] dark:opacity-30"
+          src="https://picsum.photos/seed/santelmo-noir/1400/900"
+          alt=""
+          aria-hidden="true"
+          width="1400"
+          height="900"
+          loading="eager"
+          className="h-full w-full object-cover opacity-25 blur-[1px] saturate-0"
         />
       </div>
 
@@ -75,76 +81,77 @@ export default function AbonnementContent() {
           transition={{ duration: 0.9, ease: "easeOut" }}
           className="w-full"
         >
+          {/* Feedbacks paiement */}
           {paymentStatus === "success" && (
-            <div className="mx-auto mb-8 max-w-md rounded-xl px-6 py-4 text-sm font-medium" style={{ backgroundColor: "rgba(224,159,62,0.15)", color: "var(--accent-neon)" }}>
-              ✅ Paiement confirmé ! Ton accès premium est activé.
+            <div className="mx-auto mb-8 max-w-md rounded-xl border border-amber-500/30 bg-amber-500/10 px-6 py-4 text-sm font-medium text-amber-300">
+              ✅ Paiement confirmé ! Ton accès premium est activé.
             </div>
           )}
           {paymentStatus === "cancelled" && (
-            <div className="mx-auto mb-8 max-w-md rounded-xl px-6 py-4 text-sm font-medium" style={{ backgroundColor: "rgba(158,42,43,0.1)", color: "var(--accent-blood)" }}>
+            <div className="mx-auto mb-8 max-w-md rounded-xl border border-red-500/20 bg-red-500/10 px-6 py-4 text-sm font-medium text-red-400">
               Paiement annulé. Tu peux réessayer quand tu veux.
             </div>
           )}
 
           {chapter && (
-            <p className="mb-4 text-sm font-medium uppercase tracking-widest text-orange-500 dark:text-orange-400">
+            <p className="mb-4 text-sm font-medium uppercase tracking-widest text-amber-400">
               Le chapitre {chapter} est réservé aux abonnés
             </p>
           )}
 
-          <span className="mb-4 block text-xs font-bold uppercase tracking-[0.4em] text-orange-600 dark:text-orange-400">
+          <span className="mb-4 block text-xs font-bold uppercase tracking-[0.45em] text-amber-500">
             Après Mara
           </span>
-          <h1 className="mb-4 text-4xl font-bold leading-tight tracking-tight text-neutral-950 md:text-6xl dark:text-white">
-            Continue l'enquête
+          <h1 className="mb-4 text-4xl font-bold leading-tight tracking-tight text-white md:text-6xl">
+            Continue l’enquête
           </h1>
-          <p className="mx-auto mb-14 max-w-xl text-lg font-light leading-relaxed text-neutral-600 dark:text-gray-400">
+          <p className="mx-auto mb-14 max-w-xl text-lg font-light leading-relaxed text-neutral-400">
             Les chapitres 1 à 3 sont gratuits. Pour aller plus loin dans le dossier,
-            débloque l'accès complet à l'histoire.
+            débloque l’accès complet à l’histoire.
           </p>
 
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 md:grid-cols-2">
+            {/* Carte Gratuit */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="flex flex-col rounded-2xl border p-8 text-left"
-              style={{ borderColor: "rgba(128,128,128,0.2)", backgroundColor: "rgba(255,255,255,0.04)" }}
+              className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.04] p-8 text-left"
             >
               <p className="mb-1 text-xs font-bold uppercase tracking-widest text-neutral-400">Gratuit</p>
-              <p className="mb-6 text-3xl font-bold text-neutral-900 dark:text-white">0 €</p>
-              <ul className="mb-8 flex-grow space-y-3 text-sm text-neutral-600 dark:text-gray-400">
+              <p className="mb-6 text-3xl font-bold text-white">0 €</p>
+              <ul className="mb-8 flex-grow space-y-3 text-sm text-neutral-400">
                 {FEATURES_FREE.map((f) => (
                   <li key={f} className="flex items-center gap-2">
-                    <span className="text-neutral-400">✓</span>
+                    <span className="text-neutral-500">✓</span>
                     {f}
                   </li>
                 ))}
               </ul>
               <Link
                 href="/lire"
-                className="block w-full rounded-full border py-3 text-center text-sm font-semibold uppercase tracking-widest transition-colors hover:bg-neutral-100 dark:hover:bg-white/10"
-                style={{ borderColor: "rgba(128,128,128,0.3)" }}
+                className="block w-full rounded-full border border-white/20 py-3 text-center text-sm font-semibold uppercase tracking-widest text-neutral-300 transition-colors hover:border-white/40 hover:text-white"
               >
                 Commencer à lire
               </Link>
             </motion.div>
 
+            {/* Carte Premium */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.35 }}
-              className="relative flex flex-col rounded-2xl p-8 text-left shadow-xl"
-              style={{ backgroundColor: "var(--accent-neon)" }}
+              className="relative flex flex-col rounded-2xl bg-amber-500 p-8 text-left shadow-xl shadow-amber-500/20"
             >
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-orange-700 px-4 py-1 text-xs font-bold uppercase tracking-widest text-white shadow">
-                Accès complet
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-amber-700 px-4 py-1 text-xs font-bold uppercase tracking-widest text-white shadow">
+                Offre Early Adopter
               </span>
-              <p className="mb-1 text-xs font-bold uppercase tracking-widest text-orange-900">Premium</p>
-              <div className="mb-6 flex items-end gap-2">
-                <p className="text-3xl font-bold text-neutral-950">4,99 €</p>
-                <p className="mb-1 text-sm text-orange-900">une seule fois</p>
+              <p className="mb-1 text-xs font-bold uppercase tracking-widest text-amber-900">Accès complet</p>
+              <div className="mb-1 flex items-end gap-2">
+                <p className="text-3xl font-bold text-neutral-950">2,99 €</p>
+                <p className="mb-1 text-sm text-amber-900">une seule fois</p>
               </div>
+              <p className="mb-6 text-xs text-amber-900/70">Prix réservé aux premiers lecteurs</p>
               <ul className="mb-8 flex-grow space-y-3 text-sm text-neutral-900">
                 {FEATURES_PREMIUM.map((f) => (
                   <li key={f} className="flex items-center gap-2">
@@ -154,17 +161,16 @@ export default function AbonnementContent() {
                 ))}
               </ul>
               {error && (
-                <p className="mb-3 rounded-lg px-3 py-2 text-xs" style={{ backgroundColor: "rgba(0,0,0,0.15)", color: "#fff" }}>
+                <p className="mb-3 rounded-lg bg-black/15 px-3 py-2 text-xs text-white">
                   {error}
                 </p>
               )}
               <button
                 onClick={handleCheckout}
                 disabled={loading}
-                className="block w-full rounded-full bg-neutral-950 py-3 text-center text-sm font-semibold uppercase tracking-widest text-white transition-opacity"
-                style={{ opacity: loading ? 0.6 : 1, cursor: loading ? "wait" : "pointer" }}
+                className="block w-full rounded-full bg-neutral-950 py-3 text-center text-sm font-semibold uppercase tracking-widest text-white transition-opacity disabled:cursor-wait disabled:opacity-60"
               >
-                {loading ? "Redirection..." : "Payer 4,99 €"}
+                {loading ? "Redirection..." : "Payer 2,99 €"}
               </button>
             </motion.div>
           </div>
@@ -173,12 +179,12 @@ export default function AbonnementContent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="mt-10 text-sm text-neutral-400"
+            className="mt-10 text-sm text-neutral-500"
           >
-            Déjà un compte ?{" "}
+            Déjà un compte ?{" "}
             <Link
               href={`/auth/connexion?redirect=${encodeURIComponent(redirect)}`}
-              className="underline underline-offset-2 hover:text-orange-500 transition-colors"
+              className="text-neutral-300 underline underline-offset-2 transition-colors hover:text-amber-400"
             >
               Se connecter
             </Link>
