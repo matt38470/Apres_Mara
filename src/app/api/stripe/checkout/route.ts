@@ -6,6 +6,22 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-02-24.acacia",
 });
 
+/**
+ * Logique de sélection du price :
+ *  - Si STRIPE_PRICE_ID_VIP est défini  => offre Early Adopter à 2,99€ (actuelle)
+ *  - Sinon                               => offre Standard à 4,99€ (septembre)
+ * Pour basculer en septembre : retirer STRIPE_PRICE_ID_VIP de Vercel (ou le vider).
+ */
+function getActivePriceId(): string {
+  const vip = process.env.STRIPE_PRICE_ID_VIP;
+  const standard = process.env.STRIPE_PRICE_ID_STANDARD;
+
+  if (vip && vip.trim() !== "") return vip;
+  if (standard && standard.trim() !== "") return standard;
+
+  throw new Error("Aucun STRIPE_PRICE_ID configuré dans les variables d'environnement.");
+}
+
 export async function POST(request: Request) {
   const supabase = await createClient();
 
@@ -17,6 +33,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Non connecté" }, { status: 401 });
   }
 
+  let priceId: string;
+  try {
+    priceId = getActivePriceId();
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json(
+      { error: "Configuration Stripe manquante." },
+      { status: 500 }
+    );
+  }
+
   const { redirect } = await request.json();
   const origin = new URL(request.url).origin;
 
@@ -24,7 +51,7 @@ export async function POST(request: Request) {
     mode: "payment",
     line_items: [
       {
-        price: process.env.STRIPE_PRICE_ID!,
+        price: priceId,
         quantity: 1,
       },
     ],
