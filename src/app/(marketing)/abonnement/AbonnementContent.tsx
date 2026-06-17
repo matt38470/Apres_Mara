@@ -16,6 +16,7 @@ const FEATURES_PREMIUM = [
   "Accès aux chapitres 4 à 10",
   "Tous les embranchements narratifs",
   "Archives et documents secrets",
+  "Scène exclusive à choisir — Chapitre 6 · La dette",
   "Sauvegardes automatiques",
   "Mode nuit inclus",
 ];
@@ -60,7 +61,7 @@ export default function AbonnementContent() {
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-neutral-950 text-white selection:bg-amber-500/30">
 
-      {/* Fond — même ambiance que la page d'accueil */}
+      {/* Fond — même ambiance que la page d’accueil */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 z-10 bg-gradient-to-t from-neutral-950 via-neutral-950/70 to-neutral-950/30" />
         <img
@@ -153,12 +154,17 @@ export default function AbonnementContent() {
               </div>
               <p className="mb-6 text-xs text-amber-900/70">Prix réservé aux premiers lecteurs</p>
               <ul className="mb-8 flex-grow space-y-3 text-sm text-neutral-900">
-                {FEATURES_PREMIUM.map((f) => (
-                  <li key={f} className="flex items-center gap-2">
-                    <span className="font-bold">✓</span>
-                    {f}
-                  </li>
-                ))}
+                {FEATURES_PREMIUM.map((f) => {
+                  const isExclusive = f.includes("Scène exclusive");
+                  return (
+                    <li key={f} className={`flex items-start gap-2 ${isExclusive ? "font-semibold" : ""}`}>
+                      <span className={`mt-0.5 shrink-0 font-bold ${isExclusive ? "text-amber-800" : ""}`}>
+                        {isExclusive ? "★" : "✓"}
+                      </span>
+                      {f}
+                    </li>
+                  );
+                })}
               </ul>
               {error && (
                 <p className="mb-3 rounded-lg bg-black/15 px-3 py-2 text-xs text-white">
