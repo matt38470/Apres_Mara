@@ -13,9 +13,12 @@ export function middleware(request: NextRequest) {
 
   if (isPublic) return NextResponse.next();
 
-  // Supabase stocke la session dans un cookie qui commence par sb- et finit par -auth-token
+  // Supabase peut stocker la session sous plusieurs formats de cookies :
+  // - sb-<ref>-auth-token          (ancien format)
+  // - sb-<ref>-auth-token.0 / .1   (PKCE split, format actuel)
+  // - sb-<ref>-session              (autre variante)
   const hasSession = request.cookies.getAll().some(
-    (c) => c.name.startsWith("sb-") && c.name.endsWith("-auth-token")
+    (c) => c.name.startsWith("sb-") && c.name.includes("auth-token")
   );
 
   if (!hasSession) {
