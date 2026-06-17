@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import ReaderMenu from "./ReaderMenu";
 import Gauge from "./Gauge";
 import ArchivesModal from "./ArchivesModal";
@@ -14,7 +15,7 @@ export default function LayoutClientHUD({
 }) {
   const {
     gauges,
-    mentalState, // On récupère le mentalState directement depuis le store
+    mentalState,
     archives,
     unlockedCharacters,
     newArchives,
@@ -39,7 +40,6 @@ export default function LayoutClientHUD({
       ? "font-mono tracking-tight"
       : "font-sans";
 
-  // Nous avons drastiquement simplifié les notes en utilisant notre config mentale
   const currentMentalConfig = useMemo(() => {
     return getMentalStateConfig(mentalState);
   }, [mentalState]);
@@ -53,17 +53,23 @@ export default function LayoutClientHUD({
       <header className="fixed top-0 z-40 w-full border-b border-black/10 bg-white/75 backdrop-blur-md dark:border-white/10 dark:bg-[#0b0b0c]/80">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 md:px-6">
           <div className="min-w-0">
-            {/* Titre changé pour l'ambiance */}
             <div className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#9e2a2b] dark:text-[#dc2f02]">
               Dossier Vance
             </div>
-
             <div className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
               Lecture en cours · Chapitre 1
             </div>
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Lien bibliothèque */}
+            <Link
+              href="/library"
+              className="rounded-full border border-black/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-neutral-600 transition hover:border-amber-400/40 hover:text-amber-600 dark:border-white/10 dark:text-neutral-300 dark:hover:text-amber-300"
+            >
+              Bibliothèque
+            </Link>
+
             <button
               type="button"
               onClick={() => setIsDeskOpen(true)}
@@ -105,8 +111,6 @@ export default function LayoutClientHUD({
               <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-neutral-500">
                 État personnel
               </div>
-
-              {/* Les 3 nouvelles jauges du Cartel des Âmes */}
               <div className="space-y-2">
                 <Gauge
                   idKey="dette"
@@ -133,21 +137,18 @@ export default function LayoutClientHUD({
             </div>
 
             <div className="rounded-2xl border border-black/10 bg-white/70 p-4 text-sm leading-relaxed text-neutral-600 shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:text-neutral-400">
-              <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] text-neutral-500 flex justify-between">
+              <div className="mb-2 flex justify-between text-[10px] font-bold uppercase tracking-[0.24em] text-neutral-500">
                 <span>Psychologie</span>
                 <span className="text-green-700 dark:text-green-500">{currentMentalConfig.statusLabel}</span>
               </div>
-              
               {currentMentalConfig.quickNote}
             </div>
-            
-            {/* Ajout optionnel d'une zone pour le 'narrativeCue' (description de Vance) */}
+
             {currentMentalConfig.narrativeCue && (
               <div className="rounded-2xl border border-black/10 bg-white/70 p-4 text-xs italic leading-relaxed text-neutral-500 shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:text-neutral-500">
-                "{currentMentalConfig.narrativeCue}"
+                &ldquo;{currentMentalConfig.narrativeCue}&rdquo;
               </div>
             )}
-            
           </div>
         </aside>
       </div>
@@ -163,7 +164,7 @@ export default function LayoutClientHUD({
         markCharactersSeen={markCharactersSeen}
         choiceHistory={choiceHistory}
         gauges={gauges}
-        notes={[currentMentalConfig.quickNote]} // On passe la nouvelle note
+        notes={[currentMentalConfig.quickNote]}
         currentUnitId={currentUnitId}
         onRestart={resetGame}
       />
