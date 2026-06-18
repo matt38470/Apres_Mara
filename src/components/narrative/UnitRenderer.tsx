@@ -64,7 +64,7 @@ export default function UnitRenderer({ unit }: { unit: NarrativeUnit }) {
               idKey="humanite"
               label="Humanité"
               value={gauges.humanite}
-              colorTheme="amber"
+              colorTheme="orange"
               description="La capacité d'empathie et de connexion"
             />
           </div>
