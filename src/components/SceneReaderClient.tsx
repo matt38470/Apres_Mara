@@ -108,7 +108,7 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
 
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-orange-700 dark:text-orange-400">
+            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-amber-500 dark:text-amber-400">
               {scene.location ?? "Incident NW-7"}
             </p>
             <h1 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
@@ -181,31 +181,29 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
                     });
                   }
 
-                  // Extraire le chapitre et unitNumber de la scène suivante
                   const nextChapter = parseInt(choice.nextUnitId.split(".")[0], 10);
                   const nextUnit = choice.nextUnitId;
 
-                  // Sauvegarder AVANT de naviguer pour que /account soit à jour
                   await saveProgress(nextChapter, nextUnit);
 
                   setTimeout(() => {
                     router.push(nextUrl);
                   }, hasGaugeChange || hasArchiveUnlock ? 800 : 0);
                 }}
-                className={`w-full rounded-2xl border p-4 text-left transition-all duration-300 ${
+                className={`inline-flex w-full items-center justify-center rounded-full px-10 py-4 text-sm font-bold uppercase tracking-widest shadow-lg transition-colors ${
                   alreadyChosen
-                    ? "border-emerald-500/40 bg-emerald-600 text-white shadow-md"
+                    ? "bg-emerald-500 text-white hover:bg-emerald-400"
                     : !disabled
-                    ? "border-orange-500/40 bg-orange-500 text-white shadow-md hover:bg-orange-600"
-                    : "cursor-not-allowed border-white/10 bg-neutral-800 text-neutral-400 opacity-60"
+                    ? "bg-amber-500 text-neutral-950 hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
+                    : "cursor-not-allowed bg-neutral-800 text-neutral-500 opacity-60"
                 }`}
               >
-                <div className="flex flex-col">
-                  <span className="font-medium">{choice.label}</span>
+                <div className="flex flex-col items-center gap-0.5">
+                  <span>{choice.label}</span>
                   {alreadyChosen ? (
-                    <span className="mt-1 text-xs italic opacity-90">Choix déjà validé</span>
+                    <span className="text-xs font-medium normal-case tracking-normal opacity-80">Choix déjà validé</span>
                   ) : choice.hint ? (
-                    <span className="mt-1 text-xs italic opacity-90">{choice.hint}</span>
+                    <span className="text-xs font-medium normal-case tracking-normal opacity-80">{choice.hint}</span>
                   ) : null}
                 </div>
               </button>
