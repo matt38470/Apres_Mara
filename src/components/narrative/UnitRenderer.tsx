@@ -93,25 +93,16 @@ export default function UnitRenderer({ unit }: { unit: NarrativeUnit }) {
               ))}
             </div>
 
-            {/* Choice buttons — solid amber, same style as homepage CTA */}
-            <div className="flex flex-col gap-3">
-              {unit.choices.map((choice, index) => (
-                <motion.button
+            {/* Choice buttons — exact same style as homepage CTA */}
+            <div className="flex flex-col gap-4">
+              {unit.choices.map((choice) => (
+                <button
                   key={choice.id}
                   onClick={() => handleChoice(choice)}
-                  whileHover={{ scale: 1.015 }}
-                  whileTap={{ scale: 0.985 }}
-                  className="group w-full text-left rounded-full bg-amber-500 px-6 py-4 font-bold text-black transition-colors duration-200 hover:bg-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c0d10]"
+                  className="inline-flex items-center justify-center rounded-full bg-amber-500 px-10 py-4 text-sm font-bold uppercase tracking-widest text-neutral-950 shadow-lg transition-colors hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400"
                 >
-                  <span className="block font-bold uppercase tracking-[0.12em] text-sm">
-                    {choice.label}
-                  </span>
-                  {choice.hint && (
-                    <span className="mt-0.5 block text-xs font-medium normal-case tracking-normal text-black/60">
-                      {choice.hint}
-                    </span>
-                  )}
-                </motion.button>
+                  {choice.label}
+                </button>
               ))}
             </div>
           </motion.div>
