@@ -93,26 +93,21 @@ export default function UnitRenderer({ unit }: { unit: NarrativeUnit }) {
               ))}
             </div>
 
-            {/* Choice buttons */}
+            {/* Choice buttons — solid amber, same style as homepage CTA */}
             <div className="flex flex-col gap-3">
               {unit.choices.map((choice, index) => (
                 <motion.button
                   key={choice.id}
                   onClick={() => handleChoice(choice)}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                  className="group relative w-full text-left rounded-xl border border-amber-500/25 bg-amber-500/[0.07] px-5 py-4 transition-all duration-200 hover:border-amber-500/50 hover:bg-amber-500/[0.13] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/60"
+                  whileHover={{ scale: 1.015 }}
+                  whileTap={{ scale: 0.985 }}
+                  className="group w-full text-left rounded-full bg-amber-500 px-6 py-4 font-bold text-black transition-colors duration-200 hover:bg-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c0d10]"
                 >
-                  {unit.choices.length > 1 && (
-                    <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-amber-500/60 mb-1">
-                      Choix {index + 1}
-                    </span>
-                  )}
-                  <span className="block font-semibold text-neutral-100 group-hover:text-amber-300 transition-colors">
+                  <span className="block font-bold uppercase tracking-[0.12em] text-sm">
                     {choice.label}
                   </span>
                   {choice.hint && (
-                    <span className="mt-1 block text-sm italic text-neutral-500 group-hover:text-neutral-400 transition-colors">
+                    <span className="mt-0.5 block text-xs font-medium normal-case tracking-normal text-black/60">
                       {choice.hint}
                     </span>
                   )}
