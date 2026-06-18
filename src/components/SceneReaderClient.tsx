@@ -128,7 +128,7 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
           ))}
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col items-center gap-4">
           {scene.choices.map((choice) => {
             const available = checkChoiceConditions(choice.conditions);
             const lockedChoiceId = chosenPathByUnit[scene.id];
@@ -190,7 +190,7 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
                     router.push(nextUrl);
                   }, hasGaugeChange || hasArchiveUnlock ? 800 : 0);
                 }}
-                className={`inline-flex w-full items-center justify-center rounded-full px-10 py-4 text-sm font-bold uppercase tracking-widest shadow-lg transition-colors ${
+                className={`inline-flex items-center justify-center rounded-full px-10 py-4 text-sm font-bold uppercase tracking-widest shadow-lg transition-colors ${
                   alreadyChosen
                     ? "bg-emerald-500 text-white hover:bg-emerald-400"
                     : !disabled
