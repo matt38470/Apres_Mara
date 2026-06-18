@@ -40,9 +40,10 @@ export default function UnitRenderer({ unit }: { unit: NarrativeUnit }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] text-gray-900 font-sans pb-20 selection:bg-orange-200">
+    <div className="min-h-screen bg-[#0c0d10] text-neutral-200 font-sans pb-24 selection:bg-amber-500/30">
 
-      <header className="sticky top-0 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-gray-800 p-3 z-50 shadow-sm">
+      {/* Gauges header */}
+      <header className="sticky top-0 bg-[#101216]/95 backdrop-blur-md border-b border-white/10 p-3 z-50">
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-3 gap-x-2 gap-y-3">
             <Gauge
@@ -63,68 +64,76 @@ export default function UnitRenderer({ unit }: { unit: NarrativeUnit }) {
               idKey="humanite"
               label="Humanité"
               value={gauges.humanite}
-              colorTheme="orange"
+              colorTheme="amber"
               description="La capacité d'empathie et de connexion"
             />
           </div>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto p-6 md:p-8 mt-6">
+      <main className="max-w-2xl mx-auto px-6 md:px-8 mt-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={unit.id}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.45, ease: 'easeOut' }}
           >
-            <h1 className="text-sm font-bold text-orange-600 uppercase tracking-widest mb-4">
-              SCÈNE — {unit.title} • {unit.timeLabel}
-            </h1>
+            {/* Scene label */}
+            <p className="text-[10px] font-bold text-amber-500 uppercase tracking-[0.3em] mb-5">
+              SCÈNE — {unit.title}
+              {unit.timeLabel ? <span className="text-neutral-500"> · {unit.timeLabel}</span> : null}
+            </p>
 
-            <div className="text-lg md:text-xl leading-relaxed text-gray-800 mb-12 space-y-6">
+            {/* Narrative text */}
+            <div className="text-[1.0625rem] md:text-[1.125rem] leading-[1.85] text-neutral-300 mb-14 space-y-6">
               {unit.textBlocks.map((paragraph, index) => (
                 <p key={index} dangerouslySetInnerHTML={{ __html: paragraph }} />
               ))}
             </div>
 
-            <div className="flex flex-col gap-4">
+            {/* Choice buttons */}
+            <div className="flex flex-col gap-3">
               {unit.choices.map((choice, index) => (
-                <button
+                <motion.button
                   key={choice.id}
                   onClick={() => handleChoice(choice)}
-                  className="group p-4 text-left border border-gray-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-all duration-300 shadow-sm hover:shadow-md bg-white relative overflow-hidden"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  className="group relative w-full text-left rounded-xl border border-amber-500/25 bg-amber-500/[0.07] px-5 py-4 transition-all duration-200 hover:border-amber-500/50 hover:bg-amber-500/[0.13] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/60"
                 >
-                  <div className="absolute inset-0 bg-orange-100 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 opacity-20" />
-
                   {unit.choices.length > 1 && (
-                    <span className="block text-sm font-semibold text-gray-500 group-hover:text-orange-600 mb-1 relative z-10">
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-amber-500/60 mb-1">
                       Choix {index + 1}
                     </span>
                   )}
-
-                  <span
-                    className={`block font-medium relative z-10 ${
-                      unit.choices.length === 1
-                        ? 'text-center text-orange-600 font-semibold'
-                        : 'text-gray-900'
-                    }`}
-                  >
+                  <span className="block font-semibold text-neutral-100 group-hover:text-amber-300 transition-colors">
                     {choice.label}
                   </span>
-                </button>
+                  {choice.hint && (
+                    <span className="mt-1 block text-sm italic text-neutral-500 group-hover:text-neutral-400 transition-colors">
+                      {choice.hint}
+                    </span>
+                  )}
+                </motion.button>
               ))}
             </div>
           </motion.div>
         </AnimatePresence>
       </main>
 
+      {/* Archives FAB */}
       <button
         onClick={() => setIsArchiveOpen(true)}
-        className="fixed bottom-6 right-6 bg-gray-900 border border-gray-700 text-orange-500 p-4 rounded-full shadow-2xl hover:bg-gray-800 hover:scale-105 transition-all z-40 flex items-center justify-center font-bold tracking-widest text-xs uppercase"
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full border border-white/10 bg-[#1c1b19] px-4 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-amber-500 shadow-xl transition hover:border-amber-500/30 hover:bg-[#22211f]"
       >
-        Dossiers ({archives?.length || 0})
+        Dossiers
+        {(archives?.length || 0) > 0 && (
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-black">
+            {archives?.length}
+          </span>
+        )}
       </button>
 
       <ArchivesModal
