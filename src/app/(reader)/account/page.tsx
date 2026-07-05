@@ -4,6 +4,8 @@ import Link from "next/link";
 import RestartButtons from "./RestartButtons";
 import DeleteAccountButton from "./DeleteAccountButton";
 import SignOutButton from "./SignOutButton";
+import ChangePasswordForm from "./ChangePasswordForm";
+import SubscriptionPanel from "./SubscriptionPanel";
 
 export default async function AccountPage({
   searchParams,
@@ -18,7 +20,6 @@ export default async function AccountPage({
 
   if (!user) redirect("/auth/connexion?redirect=/account");
 
-  // ⚠️ La table réelle utilisée par saveProgress est "user_progress"
   const { data: progress } = await supabase
     .from("user_progress")
     .select("chapter, unit_number")
@@ -38,6 +39,16 @@ export default async function AccountPage({
     month: "long",
     day: "numeric",
   });
+
+  // Récupère les achats / chapitres débloqués (table à créer si besoin)
+  const { data: purchases } = await supabase
+    .from("user_purchases")
+    .select("plan, chapters_unlocked")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  const currentPlan = purchases?.plan ?? "gratuit";
+  const chaptersUnlocked: number[] = purchases?.chapters_unlocked ?? [1];
 
   return (
     <main className="min-h-screen px-4 py-16 bg-[#f7f5f0] dark:bg-[#0c0d10]">
@@ -92,6 +103,14 @@ export default async function AccountPage({
           )}
         </section>
 
+        {/* Abonnement */}
+        <section className="rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/[0.03] p-5 flex flex-col gap-3">
+          <h2 className="text-[10px] font-bold uppercase tracking-[0.24em] text-neutral-400 mb-1">
+            Accès &amp; abonnement
+          </h2>
+          <SubscriptionPanel plan={currentPlan} chaptersUnlocked={chaptersUnlocked} />
+        </section>
+
         {/* Lecture */}
         <section className="rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/[0.03] p-5 flex flex-col gap-3">
           <h2 className="text-[10px] font-bold uppercase tracking-[0.24em] text-neutral-400 mb-1">
@@ -103,6 +122,14 @@ export default async function AccountPage({
             chapterStartUrl={chapterStartUrl}
             currentChapter={currentChapter}
           />
+        </section>
+
+        {/* Mot de passe */}
+        <section className="rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/[0.03] p-5 flex flex-col gap-3">
+          <h2 className="text-[10px] font-bold uppercase tracking-[0.24em] text-neutral-400 mb-1">
+            Mot de passe
+          </h2>
+          <ChangePasswordForm />
         </section>
 
         {/* Déconnexion */}
