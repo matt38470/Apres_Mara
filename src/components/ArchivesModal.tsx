@@ -20,19 +20,19 @@ const ARCHIVES_DB: Record<
   valerius_dossier: {
     id: "valerius_dossier",
     name: "VALERIUS",
-    role: "Officier de la Canopée",
+    role: "Officier de la Canôpée",
     status: "MENACE LATENTE",
     tag: "DANGER",
     image: "None",
     details: [
-      "Flic de la Canopée. Ressemble à un notaire qui aurait appris à menacer sans hausser le ton.",
+      "Flic de la Canôpée. Ressemble à un notaire qui aurait appris à menacer sans hausser le ton.",
       "Présent sur la scène Sterling. Sait ce qu'il ne dit pas.",
     ],
   },
   sterling_dossier: {
     id: "sterling_dossier",
     name: "LES STERLING",
-    role: "Famille de la Canopée",
+    role: "Famille de la Canôpée",
     status: "VICTIMES OU COMPLICES",
     tag: "DOSSIER",
     image: "None",
@@ -53,7 +53,7 @@ const CHARACTER_DB = [
   {
     id: "valerius",
     name: "Valerius",
-    role: "Officier de la Canopée",
+    role: "Officier de la Canôpée",
     status: "Ambigu",
     image: "None",
     relation: "Allié ou obstacle selon vos choix.",
@@ -206,7 +206,7 @@ export default function ArchivesModal({
 
                   <div className="flex items-center gap-2">
                     <Link
-                      href="/auth/connexion?redirect=%2F"
+                      href="/account"
                       onClick={onClose}
                       className="rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-700 transition hover:bg-amber-500/20 dark:text-amber-300 dark:hover:bg-amber-500/20"
                     >
