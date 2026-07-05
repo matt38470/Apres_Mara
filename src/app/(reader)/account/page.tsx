@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import RestartButtons from "./RestartButtons";
 import DeleteAccountButton from "./DeleteAccountButton";
+import SignOutButton from "./SignOutButton";
 
 export default async function AccountPage({
   searchParams,
@@ -17,7 +18,6 @@ export default async function AccountPage({
 
   if (!user) redirect("/auth/connexion?redirect=/account");
 
-  // Récupère la progression depuis Supabase
   const { data: progress } = await supabase
     .from("reader_progress")
     .select("chapter, unit_number")
@@ -111,14 +111,7 @@ export default async function AccountPage({
           <h2 className="text-[10px] font-bold uppercase tracking-[0.24em] text-neutral-400 mb-1">
             Session
           </h2>
-          <form action="/auth/signout" method="post">
-            <button
-              type="submit"
-              className="w-full rounded-full border border-black/10 dark:border-white/10 bg-transparent px-4 py-2.5 text-sm font-bold uppercase tracking-[0.18em] transition-all hover:bg-black/5 dark:hover:bg-white/5 text-neutral-700 dark:text-neutral-300"
-            >
-              Se déconnecter
-            </button>
-          </form>
+          <SignOutButton />
         </section>
 
         {/* Zone danger */}
