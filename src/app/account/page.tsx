@@ -1,14 +1,2 @@
-import { Suspense } from "react";
-import AccountContent from "./AccountContent";
-
-export const metadata = {
-  title: "Mon compte · Le Cartel des Âmes",
-};
-
-export default function AccountPage() {
-  return (
-    <Suspense>
-      <AccountContent />
-    </Suspense>
-  );
-}
+// Ce fichier ne doit pas exister — la page /account est dans src/app/(reader)/account/page.tsx
+export { default } from "../../../src/app/(reader)/account/page";
