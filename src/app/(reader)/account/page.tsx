@@ -18,12 +18,11 @@ export default async function AccountPage({
 
   if (!user) redirect("/auth/connexion?redirect=/account");
 
+  // ⚠️ La table réelle utilisée par saveProgress est "user_progress"
   const { data: progress } = await supabase
-    .from("reader_progress")
+    .from("user_progress")
     .select("chapter, unit_number")
     .eq("user_id", user.id)
-    .order("updated_at", { ascending: false })
-    .limit(1)
     .maybeSingle();
 
   const currentChapter = progress?.chapter ?? 1;
