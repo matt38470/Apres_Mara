@@ -141,16 +141,18 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
                 key={choice.id}
                 type="button"
                 disabled={disabled}
-                onClick={async () => {
+                onClick={() => {
                   if (disabled) return;
 
                   const nextUrl = resolveNextUnitUrl(choice.nextUnitId);
 
+                  // Si la scène est déjà résolue (retour en arrière), navigation directe
                   if (sceneAlreadyResolved) {
                     if (alreadyChosen) router.push(nextUrl);
                     return;
                   }
 
+                  // Appliquer le choix dans le store
                   applyChoice(choice.effects, choice.unlockArchive, choice.id);
                   setChosenPath(scene.id, choice.id);
 
@@ -184,11 +186,9 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
                   const nextChapter = parseInt(choice.nextUnitId.split(".")[0], 10);
                   const nextUnit = choice.nextUnitId;
 
-                  await saveProgress(nextChapter, nextUnit);
-
-                  setTimeout(() => {
-                    router.push(nextUrl);
-                  }, hasGaugeChange || hasArchiveUnlock ? 800 : 0);
+                  // Navigation immédiate — saveProgress en fire-and-forget
+                  router.push(nextUrl);
+                  void saveProgress(nextChapter, nextUnit);
                 }}
                 className={`inline-flex items-center justify-center rounded-full px-10 py-4 text-sm font-bold uppercase tracking-widest shadow-lg transition-colors ${
                   alreadyChosen
