@@ -1,0 +1,14 @@
+{
+  "bypassToken": null,
+  "headers": [
+    {
+      "source": "/api/stripe/webhook",
+      "headers": [
+        {
+          "key": "x-vercel-protection-bypass",
+          "value": "true"
+        }
+      ]
+    }
+  ]
+}
