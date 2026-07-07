@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-02-24.acacia",
+  apiVersion: "2026-05-27.dahlia" as any,
 });
 
 function createAdminClient() {
@@ -14,9 +14,11 @@ function createAdminClient() {
   );
 }
 
+export const runtime = "nodejs";
+
 export async function POST(request: Request) {
   const body = await request.text();
-  const signature = request.headers.get("stripe-signature")!;
+  const signature = request.headers.get("stripe-signature") ?? "";
 
   let event: Stripe.Event;
 
@@ -36,6 +38,7 @@ export async function POST(request: Request) {
     const userId = session.metadata?.user_id;
 
     if (!userId) {
+      console.error("user_id manquant dans metadata", session.id);
       return NextResponse.json({ error: "user_id manquant" }, { status: 400 });
     }
 

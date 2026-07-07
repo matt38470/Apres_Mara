@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { createClient } from "@/src/lib/supabase/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-02-24.acacia",
+  apiVersion: "2026-05-27.dahlia" as any,
 });
 
 const PRICE_IDS = {
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Plan invalide" }, { status: 400 });
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? req.nextUrl.origin;
+  const baseUrl = req.nextUrl.origin;
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
