@@ -40,7 +40,7 @@ export default async function AccountPage({
     day: "numeric",
   });
 
-  // R\u00e9cup\u00e8re les droits d'acc\u00e8s depuis user_entitlements
+  // Récupère les droits d'accès depuis user_entitlements
   const { data: entitlement } = await supabase
     .from("user_entitlements")
     .select("has_premium, premium_since")
@@ -50,7 +50,7 @@ export default async function AccountPage({
   const hasPremium = entitlement?.has_premium ?? false;
   const premiumSince = entitlement?.premium_since ?? null;
 
-  // Chapitres d\u00e9bloqu\u00e9s selon le statut
+  // Chapitres débloqués selon le statut
   const chaptersUnlocked: number[] = hasPremium
     ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     : [1, 2, 3];
@@ -65,7 +65,7 @@ export default async function AccountPage({
             href="/"
             className="inline-block mb-6 text-xs font-bold uppercase tracking-[0.24em] text-neutral-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
           >
-            \u2190 Retour
+            ← Retour
           </Link>
           <div className="text-[10px] font-bold uppercase tracking-[0.36em] text-amber-600 dark:text-amber-400 mb-2">
             Carnet de Traqueur
@@ -102,16 +102,16 @@ export default async function AccountPage({
             <div className="flex justify-between text-sm">
               <span className="text-neutral-500 dark:text-neutral-400">Progression</span>
               <span className="text-neutral-900 dark:text-neutral-100 font-medium">
-                Chapitre {progress.chapter} \u00b7 Sc\u00e8ne {progress.unit_number}
+                Chapitre {progress.chapter} · Scène {progress.unit_number}
               </span>
             </div>
           )}
         </section>
 
-        {/* Acc\u00e8s & abonnement */}
+        {/* Accès & abonnement */}
         <section className="rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/[0.03] p-5 flex flex-col gap-3">
           <h2 className="text-[10px] font-bold uppercase tracking-[0.24em] text-neutral-400 mb-1">
-            Acc\u00e8s &amp; abonnement
+            Accès &amp; abonnement
           </h2>
           <SubscriptionPanel
             hasPremium={hasPremium}
@@ -141,7 +141,7 @@ export default async function AccountPage({
           <ChangePasswordForm />
         </section>
 
-        {/* D\u00e9connexion */}
+        {/* Déconnexion */}
         <section className="rounded-2xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/[0.03] p-5 flex flex-col gap-3">
           <h2 className="text-[10px] font-bold uppercase tracking-[0.24em] text-neutral-400 mb-1">
             Session
@@ -155,7 +155,7 @@ export default async function AccountPage({
             Zone dangereuse
           </h2>
           <p className="text-xs text-neutral-500 dark:text-neutral-400">
-            La suppression du compte est d\u00e9finitive et irr\u00e9versible.
+            La suppression du compte est définitive et irréversible.
           </p>
           <DeleteAccountButton />
         </section>

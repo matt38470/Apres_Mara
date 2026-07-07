@@ -29,7 +29,7 @@ export default function ConnexionContent() {
       if (error) {
         setError("Email ou mot de passe incorrect.");
       } else {
-        router.push(redirect);
+        router.replace(redirect);
         router.refresh();
       }
     } else {
@@ -39,9 +39,9 @@ export default function ConnexionContent() {
         options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
       });
       if (error) {
-        setError("Erreur lors de l’inscription : " + error.message);
+        setError("Erreur lors de l'inscription : " + error.message);
       } else {
-        setMessage("Un email de confirmation t’a été envoyé. Vérifie ta boîte mail.");
+        setMessage("Un email de confirmation t'a été envoyé. Vérifie ta boîte mail.");
       }
     }
 
@@ -148,7 +148,7 @@ export default function ConnexionContent() {
 
         {mode === "login" && (
           <p className="text-center text-xs mt-6 text-neutral-400">
-            Mot de passe oublié ? Contacte-nous.
+            Mot de passe oublié ? Contacte-nous.
           </p>
         )}
 

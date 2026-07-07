@@ -7,6 +7,7 @@ import Gauge from "./Gauge";
 import ArchivesModal from "./ArchivesModal";
 import { useGameStore } from "@/src/store/gameStore";
 import { getMentalStateConfig } from "@/mentalStateConfig";
+import { useRestoreProgress } from "@/src/hooks/useRestoreProgress";
 
 export default function LayoutClientHUD({
   children,
@@ -27,6 +28,9 @@ export default function LayoutClientHUD({
     markCharactersSeen,
     resetGame,
   } = useGameStore();
+
+  // Restaure la progression depuis Supabase au montage
+  useRestoreProgress();
 
   const [isDeskOpen, setIsDeskOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
