@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useGameStore } from "@/src/store/gameStore";
+import { useIsPremium } from "@/src/hooks/useIsPremium";
 
 const CHAPTERS = [
   {
@@ -91,12 +92,10 @@ const CHAPTERS = [
 
 type ChapterStatus = "available" | "in-progress" | "done" | "locked" | "locked-premium";
 
-function useChapterStatuses() {
+function useChapterStatuses(isPremiumUnlocked: boolean) {
   const store = useGameStore();
   const currentUnitId: string = store.currentUnitId ?? "1.1.1";
   const choiceHistory: Array<{ chapterNumber: number }> = store.choiceHistory ?? [];
-  // @ts-expect-error isPremium peut ne pas encore être dans le store
-  const isPremiumUnlocked: boolean = store.isPremium ?? false;
 
   return useMemo(() => {
     const currentChapter = parseInt(currentUnitId.split(".")[0], 10) || 1;
@@ -170,10 +169,12 @@ const STATUS_CONFIG: Record<
 
 export default function LibraryPage() {
   const router = useRouter();
-  const chapters = useChapterStatuses();
   const store = useGameStore();
   const currentUnitId: string = store.currentUnitId ?? "1.1.1";
   const resumeChapter = parseInt(currentUnitId.split(".")[0], 10) || 1;
+
+  const { isPremium, loading: premiumLoading } = useIsPremium();
+  const chapters = useChapterStatuses(isPremium);
 
   function handleChapterAction(ch: (typeof chapters)[number]) {
     if (ch.status === "locked") return;
@@ -231,98 +232,111 @@ export default function LibraryPage() {
           </Link>
         </div>
 
-        <div className="space-y-3">
-          {chapters.map((ch, i) => {
-            const cfg = STATUS_CONFIG[ch.status];
-            const isSeqLocked = ch.status === "locked";
-            const isPremLocked = ch.status === "locked-premium";
+        {premiumLoading ? (
+          <div className="space-y-3">
+            {[...Array(10)].map((_, i) => (
+              <div
+                key={i}
+                className="h-20 animate-pulse rounded-2xl border border-black/10 bg-white/70 dark:border-white/10 dark:bg-white/[0.03]"
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {chapters.map((ch, i) => {
+              const cfg = STATUS_CONFIG[ch.status];
+              const isSeqLocked = ch.status === "locked";
+              const isPremLocked = ch.status === "locked-premium";
 
-            return (
-              <motion.article
-                key={ch.number}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04, duration: 0.28 }}
-                className={`flex items-center gap-4 rounded-2xl border p-4 transition ${
-                  isSeqLocked
-                    ? "border-black/[0.06] bg-white/30 opacity-50 dark:border-white/[0.06] dark:bg-white/[0.01]"
-                    : "border-black/10 bg-white/70 hover:border-amber-500/20 hover:shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-amber-500/20"
-                }`}
-              >
-                <div
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums ${
+              return (
+                <motion.article
+                  key={ch.number}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04, duration: 0.28 }}
+                  className={`flex items-center gap-4 rounded-2xl border p-4 transition ${
                     isSeqLocked
-                      ? "bg-neutral-200/60 text-neutral-400 dark:bg-white/[0.04] dark:text-neutral-600"
-                      : ch.status === "done"
-                      ? "bg-green-500/15 text-green-700 dark:text-green-400"
-                      : isPremLocked
-                      ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                      : "bg-amber-500/15 text-amber-700 dark:text-amber-400"
+                      ? "border-black/[0.06] bg-white/30 opacity-50 dark:border-white/[0.06] dark:bg-white/[0.01]"
+                      : "border-black/10 bg-white/70 hover:border-amber-500/20 hover:shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-amber-500/20"
                   }`}
                 >
-                  {ch.number}
-                </div>
+                  <div
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums ${
+                      isSeqLocked
+                        ? "bg-neutral-200/60 text-neutral-400 dark:bg-white/[0.04] dark:text-neutral-600"
+                        : ch.status === "done"
+                        ? "bg-green-500/15 text-green-700 dark:text-green-400"
+                        : isPremLocked
+                        ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                        : "bg-amber-500/15 text-amber-700 dark:text-amber-400"
+                    }`}
+                  >
+                    {ch.number}
+                  </div>
 
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-semibold text-neutral-950 dark:text-white">
-                      {ch.title}
-                    </span>
-                    {cfg.badge && (
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] ${cfg.badgeClass}`}
-                      >
-                        {cfg.badge}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-semibold text-neutral-950 dark:text-white">
+                        {ch.title}
                       </span>
+                      {cfg.badge && (
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] ${cfg.badgeClass}`}
+                        >
+                          {cfg.badge}
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-0.5 text-[11px] uppercase tracking-[0.14em] text-neutral-500">
+                      {ch.subtitle}
+                    </p>
+                    {!isSeqLocked && !isPremLocked && (
+                      <p className="mt-1.5 line-clamp-1 text-sm text-neutral-600 dark:text-neutral-400">
+                        {ch.teaser}
+                      </p>
+                    )}
+                    {isPremLocked && (
+                      <p className="mt-1.5 text-sm italic text-neutral-400 dark:text-neutral-500">
+                        Chapitre réservé aux abonnés
+                      </p>
                     )}
                   </div>
-                  <p className="mt-0.5 text-[11px] uppercase tracking-[0.14em] text-neutral-500">
-                    {ch.subtitle}
-                  </p>
-                  {!isSeqLocked && !isPremLocked && (
-                    <p className="mt-1.5 line-clamp-1 text-sm text-neutral-600 dark:text-neutral-400">
-                      {ch.teaser}
-                    </p>
-                  )}
-                  {isPremLocked && (
-                    <p className="mt-1.5 text-sm italic text-neutral-400 dark:text-neutral-500">
-                      Chapitre réservé aux abonnés
-                    </p>
-                  )}
-                </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleChapterAction(ch)}
-                  disabled={cfg.disabled}
-                  className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition ${cfg.btnClass}`}
-                >
-                  {cfg.btnLabel}
-                </button>
-              </motion.article>
-            );
-          })}
-        </div>
+                  <button
+                    type="button"
+                    onClick={() => handleChapterAction(ch)}
+                    disabled={cfg.disabled}
+                    className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition ${cfg.btnClass}`}
+                  >
+                    {cfg.btnLabel}
+                  </button>
+                </motion.article>
+              );
+            })}
+          </div>
+        )}
       </main>
 
       <footer className="mx-auto max-w-3xl px-5 pb-16 pt-6 md:px-6">
-        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-transparent p-6 text-center dark:border-amber-500/15">
-          <div className="text-[10px] font-bold uppercase tracking-[0.28em] text-amber-600 dark:text-amber-400">
-            Accès complet
+        {!isPremium && !premiumLoading && (
+          <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-transparent p-6 text-center dark:border-amber-500/15">
+            <div className="text-[10px] font-bold uppercase tracking-[0.28em] text-amber-600 dark:text-amber-400">
+              Accès complet
+            </div>
+            <h2 className="mt-2 text-lg font-semibold text-neutral-950 dark:text-white">
+              Débloquez les 7 chapitres restants
+            </h2>
+            <p className="mx-auto mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-400">
+              Un abonnement unique pour suivre Vance jusqu'au bout de sa nuit — et de ses choix.
+            </p>
+            <Link
+              href="/abonnement"
+              className="mt-5 inline-block rounded-full bg-amber-500 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-md transition hover:bg-amber-600"
+            >
+              Voir l'abonnement
+            </Link>
           </div>
-          <h2 className="mt-2 text-lg font-semibold text-neutral-950 dark:text-white">
-            Débloquez les 7 chapitres restants
-          </h2>
-          <p className="mx-auto mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-400">
-            Un abonnement unique pour suivre Vance jusqu'au bout de sa nuit — et de ses choix.
-          </p>
-          <Link
-            href="/abonnement"
-            className="mt-5 inline-block rounded-full bg-amber-500 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-md transition hover:bg-amber-600"
-          >
-            Voir l'abonnement
-          </Link>
-        </div>
+        )}
       </footer>
     </div>
   );
