@@ -37,5 +37,14 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/account/:path*", "/library/:path*", "/history/:path*"],
+  matcher: [
+    /*
+     * On fait tourner le middleware sur toutes les routes SAUF :
+     * - _next/static  (fichiers statiques)
+     * - _next/image   (optimisation d'images)
+     * - favicon.ico
+     * - api/*         (routes API, dont le webhook Stripe)
+     */
+    "/((?!_next/static|_next/image|favicon.ico|api/).*)",
+  ],
 };
