@@ -1,5 +1,4 @@
 {
-  "bypassToken": null,
   "headers": [
     {
       "source": "/api/stripe/webhook",
