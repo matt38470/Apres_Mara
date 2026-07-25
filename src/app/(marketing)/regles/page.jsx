@@ -13,7 +13,7 @@ const JAUGES = [
     barre: "bg-red-400",
     exemple: 80,
     description:
-      "Le cartel tient les comptes. Chaque faveur refusée, chaque délai alourdit la balance. Quand la dette déborde, vos proches en paient le prix — pas vous.",
+      "Le Cartel tient les comptes. Chaque faveur refusée, chaque délai alourdit la balance. Quand la dette déborde, vos proches en paient le prix — pas vous.",
   },
   {
     nom: "Ancrage",
@@ -22,7 +22,7 @@ const JAUGES = [
     barre: "bg-violet-400",
     exemple: 100,
     description:
-      "Votre conjoint(e) est en stase. C'est ce qui vous maintient debout et ce qui vous rend vulnérable. Plus l'Ancrage faiblit, moins vous avez de raison de rentrer vivant.",
+      "Mara est quelque part. C'est ce qui vous maintient debout — et ce qui vous rend vulnérable. Plus l'Ancrage faiblit, moins vous distinguez l'enquête du deuil.",
   },
   {
     nom: "Humanité",
@@ -31,7 +31,7 @@ const JAUGES = [
     barre: "bg-amber-400",
     exemple: 50,
     description:
-      "Ce qu'il vous reste d'empathie, de principes, de dégoût face à la corruption. Vance peut survivre sans. Mais l'état psychologique qui s'affiche à l'écran ne mentira pas.",
+      "Ce qu'il vous reste d'empathie, de principes, de dégoût face à la corruption. Vance peut survivre sans. Mais l'état psychologique affiché à l'écran ne mentira pas.",
   },
 ];
 
@@ -53,7 +53,6 @@ export default function ReglesPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-950 px-6 py-16 text-white selection:bg-amber-500/30 md:px-12">
       <div className="w-full max-w-2xl">
 
-        {/* En-tête */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -61,13 +60,13 @@ export default function ReglesPage() {
           className="mb-8"
         >
           <span className="mb-4 block text-xs font-bold uppercase tracking-[0.4em] text-amber-500">
-            Le Cartel des Âmes
+            Après Mara
           </span>
           <h1 className="mb-4 text-3xl font-bold tracking-tight text-white md:text-4xl">
             Comment jouer
           </h1>
           <p className="max-w-xl text-base font-light leading-relaxed text-neutral-400">
-            Vous êtes Vance. Détective privé dans les bas-fonds de San Telmo.
+            Vous êtes Victor Vance. Détective privé dans les bas-fonds de San Telmo.
             À chaque carrefour, vous choisissez — et trois jauges enregistrent
             silencieusement ce que vous devenez.
           </p>
@@ -75,7 +74,6 @@ export default function ReglesPage() {
 
         <div className="my-8 h-px w-full bg-white/10" />
 
-        {/* Jauges */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -94,9 +92,8 @@ export default function ReglesPage() {
                 <h3 className={`text-sm font-bold uppercase tracking-widest ${j.couleur}`}>
                   {j.nom}
                 </h3>
-                <span className="text-xs font-mono text-neutral-500">{j.exemple} / 100</span>
+                <span className="text-xs font-mono text-neutral-500">{j.exemple} / 100</span>
               </div>
-              {/* Barre d'exemple */}
               <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                 <div
                   className={`h-full rounded-full ${j.barre} transition-all`}
@@ -110,7 +107,6 @@ export default function ReglesPage() {
           ))}
         </motion.div>
 
-        {/* État psychologique */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -128,7 +124,6 @@ export default function ReglesPage() {
           </p>
         </motion.div>
 
-        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -142,7 +137,7 @@ export default function ReglesPage() {
                 onClick={handleContinue}
                 className="inline-flex items-center justify-center rounded-full bg-amber-500 px-10 py-4 text-sm font-bold uppercase tracking-widest text-neutral-950 shadow-lg transition-colors hover:bg-amber-400"
               >
-                Reprendre l’enquête
+                Reprendre l'enquête
               </button>
               <button
                 type="button"
@@ -158,7 +153,7 @@ export default function ReglesPage() {
               onClick={handleStartFresh}
               className="inline-flex items-center justify-center rounded-full bg-amber-500 px-10 py-4 text-sm font-bold uppercase tracking-widest text-neutral-950 shadow-lg transition-colors hover:bg-amber-400"
             >
-              Commencer l’enquête
+              Commencer l'enquête
             </button>
           )}
         </motion.div>

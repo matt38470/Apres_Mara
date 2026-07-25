@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -105,7 +105,6 @@ function useChapterStatuses(isPremiumUnlocked: boolean) {
       if (ch.number < currentChapter) {
         return { ...ch, status: "done" as ChapterStatus };
       }
-
       if (ch.number === currentChapter) {
         if (ch.premium && !isPremiumUnlocked) {
           return { ...ch, status: "locked-premium" as ChapterStatus };
@@ -116,7 +115,6 @@ function useChapterStatuses(isPremiumUnlocked: boolean) {
           status: neverStarted ? ("available" as ChapterStatus) : ("in-progress" as ChapterStatus),
         };
       }
-
       if (ch.premium && !isPremiumUnlocked) {
         return { ...ch, status: "locked-premium" as ChapterStatus };
       }
@@ -158,10 +156,10 @@ const STATUS_CONFIG: Record<
     disabled: true,
   },
   "locked-premium": {
-    badge: "🔒 Premium",
+    badge: "🔒 Prérelease",
     badgeClass:
       "border border-amber-500/30 bg-amber-500/[0.08] text-amber-600 dark:text-amber-400",
-    btnLabel: "Débloquer",
+    btnLabel: "Soutenir",
     btnClass:
       "border border-amber-500/40 bg-amber-500/5 text-amber-600 hover:bg-amber-500/10 dark:text-amber-400 dark:hover:bg-amber-500/10",
   },
@@ -173,8 +171,16 @@ export default function LibraryPage() {
   const currentUnitId: string = store.currentUnitId ?? "1.1.1";
   const resumeChapter = parseInt(currentUnitId.split(".")[0], 10) || 1;
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const { isPremium, loading: premiumLoading } = useIsPremium();
   const chapters = useChapterStatuses(isPremium);
+
+  // Empêche le flash SSR : on n'affiche rien tant que le client n'est pas monté
+  if (!mounted) {
+    return <div className="min-h-screen bg-[#f7f5f0] dark:bg-[#0c0d10]" />;
+  }
 
   function handleChapterAction(ch: (typeof chapters)[number]) {
     if (ch.status === "locked") return;
@@ -199,10 +205,10 @@ export default function LibraryPage() {
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-5 py-4 md:px-6">
           <div>
             <div className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#9e2a2b] dark:text-[#dc2f02]">
-              Le Cartel des Âmes
+              Après Mara
             </div>
             <h1 className="mt-0.5 text-lg font-semibold tracking-tight text-neutral-950 dark:text-white">
-              Bibliothèque
+              Sommaire
             </h1>
           </div>
           <Link
@@ -297,7 +303,7 @@ export default function LibraryPage() {
                     )}
                     {isPremLocked && (
                       <p className="mt-1.5 text-sm italic text-neutral-400 dark:text-neutral-500">
-                        Chapitre réservé aux abonnés
+                        Disponible en prérelease
                       </p>
                     )}
                   </div>
@@ -321,19 +327,19 @@ export default function LibraryPage() {
         {!isPremium && !premiumLoading && (
           <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-transparent p-6 text-center dark:border-amber-500/15">
             <div className="text-[10px] font-bold uppercase tracking-[0.28em] text-amber-600 dark:text-amber-400">
-              Accès complet
+              Prérelease
             </div>
             <h2 className="mt-2 text-lg font-semibold text-neutral-950 dark:text-white">
-              Débloquez les 7 chapitres restants
+              La suite est en cours d'écriture
             </h2>
             <p className="mx-auto mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-400">
-              Un abonnement unique pour suivre Vance jusqu'au bout de sa nuit — et de ses choix.
+              Soutenez le projet et accédez aux prochains chapitres dès leur sortie, en avant-première.
             </p>
             <Link
               href="/abonnement"
               className="mt-5 inline-block rounded-full bg-amber-500 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-md transition hover:bg-amber-600"
             >
-              Voir l'abonnement
+              Soutenir le projet
             </Link>
           </div>
         )}
