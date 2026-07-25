@@ -13,7 +13,7 @@ const FEATURES_FREE = [
 
 const FEATURES_PREMIUM = [
   "Chapitres 1 à 3 inclus",
-  "Accès aux chapitres 4 à 10",
+  "Accès prioritaire aux chapitres 4+ dès leur sortie",
   "Tous les embranchements narratifs",
   "Archives et documents secrets",
   "Scène exclusive à choisir — Chapitre 6 · La dette",
@@ -61,7 +61,7 @@ export default function AbonnementContent() {
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-neutral-950 text-white selection:bg-amber-500/30">
 
-      {/* Fond — même ambiance que la page d’accueil */}
+      {/* Fond — même ambiance que la page d'accueil */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 z-10 bg-gradient-to-t from-neutral-950 via-neutral-950/70 to-neutral-950/30" />
         <img
@@ -82,10 +82,11 @@ export default function AbonnementContent() {
           transition={{ duration: 0.9, ease: "easeOut" }}
           className="w-full"
         >
+
           {/* Feedbacks paiement */}
           {paymentStatus === "success" && (
             <div className="mx-auto mb-8 max-w-md rounded-xl border border-amber-500/30 bg-amber-500/10 px-6 py-4 text-sm font-medium text-amber-300">
-              ✅ Paiement confirmé ! Ton accès premium est activé.
+              ✅ Paiement confirmé ! Ton accès prérelease est activé.
             </div>
           )}
           {paymentStatus === "cancelled" && (
@@ -94,22 +95,43 @@ export default function AbonnementContent() {
             </div>
           )}
 
-          {chapter && (
-            <p className="mb-4 text-sm font-medium uppercase tracking-widest text-amber-400">
-              Le chapitre {chapter} est réservé aux abonnés
-            </p>
+          {/* Accroche narrative — uniquement hors contexte feedback paiement */}
+          {paymentStatus !== "success" && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
+              className="mx-auto mb-14 max-w-xl"
+            >
+              <span className="mb-6 block text-xs font-bold uppercase tracking-[0.45em] text-amber-500">
+                Après Mara
+              </span>
+              <blockquote className="mb-8 border-l-2 border-amber-500/40 pl-5 text-left">
+                <p className="text-base font-light italic leading-relaxed text-neutral-300">
+                  &laquo; Mara n'est pas morte comme tu le crois, Victor. &raquo;
+                </p>
+                <p className="mt-3 text-base font-light italic leading-relaxed text-neutral-300">
+                  &laquo; Et la fillette qui la porte t'a déjà regardé dans les yeux. &raquo;
+                </p>
+                <footer className="mt-3 text-xs text-neutral-600">
+                  Anna — Chapitre 3, scène finale
+                </footer>
+              </blockquote>
+              <h1 className="mb-4 text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl">
+                La suite est en cours d'écriture.
+              </h1>
+              <p className="text-lg font-light leading-relaxed text-neutral-400">
+                Soutenez le projet maintenant et accédez aux prochains chapitres
+                dès leur sortie — en avant-première, avant tout le monde.
+              </p>
+            </motion.div>
           )}
 
-          <span className="mb-4 block text-xs font-bold uppercase tracking-[0.45em] text-amber-500">
-            Après Mara
-          </span>
-          <h1 className="mb-4 text-4xl font-bold leading-tight tracking-tight text-white md:text-6xl">
-            Continue l’enquête
-          </h1>
-          <p className="mx-auto mb-14 max-w-xl text-lg font-light leading-relaxed text-neutral-400">
-            Les chapitres 1 à 3 sont gratuits. Pour aller plus loin dans le dossier,
-            débloque l’accès complet à l’histoire.
-          </p>
+          {chapter && paymentStatus !== "success" && (
+            <p className="mb-6 text-sm font-medium uppercase tracking-widest text-amber-400">
+              Le chapitre {chapter} sera disponible dès sa sortie
+            </p>
+          )}
 
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 md:grid-cols-2">
             {/* Carte Gratuit */}
@@ -120,7 +142,7 @@ export default function AbonnementContent() {
               className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.04] p-8 text-left"
             >
               <p className="mb-1 text-xs font-bold uppercase tracking-widest text-neutral-400">Gratuit</p>
-              <p className="mb-6 text-3xl font-bold text-white">0 €</p>
+              <p className="mb-6 text-3xl font-bold text-white">0 €</p>
               <ul className="mb-8 flex-grow space-y-3 text-sm text-neutral-400">
                 {FEATURES_FREE.map((f) => (
                   <li key={f} className="flex items-center gap-2">
@@ -137,7 +159,7 @@ export default function AbonnementContent() {
               </Link>
             </motion.div>
 
-            {/* Carte Premium */}
+            {/* Carte Prérelease */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -147,9 +169,9 @@ export default function AbonnementContent() {
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-amber-700 px-4 py-1 text-xs font-bold uppercase tracking-widest text-white shadow">
                 Offre Early Adopter
               </span>
-              <p className="mb-1 text-xs font-bold uppercase tracking-widest text-amber-900">Accès complet</p>
+              <p className="mb-1 text-xs font-bold uppercase tracking-widest text-amber-900">Prérelease</p>
               <div className="mb-1 flex items-end gap-2">
-                <p className="text-3xl font-bold text-neutral-950">2,99 €</p>
+                <p className="text-3xl font-bold text-neutral-950">2,99 €</p>
                 <p className="mb-1 text-sm text-amber-900">une seule fois</p>
               </div>
               <p className="mb-6 text-xs text-amber-900/70">Prix réservé aux premiers lecteurs</p>
@@ -176,7 +198,7 @@ export default function AbonnementContent() {
                 disabled={loading}
                 className="block w-full rounded-full bg-neutral-950 py-3 text-center text-sm font-semibold uppercase tracking-widest text-white transition-opacity disabled:cursor-wait disabled:opacity-60"
               >
-                {loading ? "Redirection..." : "Payer 2,99 €"}
+                {loading ? "Redirection..." : "Soutenir — 2,99 €"}
               </button>
             </motion.div>
           </div>
