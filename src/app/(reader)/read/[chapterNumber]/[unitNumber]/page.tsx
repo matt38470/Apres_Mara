@@ -22,6 +22,12 @@ export default async function ReadPage({ params }: PageProps) {
   }
 
   const scene = getScene(chapterNumber, unitNumber);
+
+  // Scène introuvable sur un chapitre futur (pas encore écrit)
+  if (!scene && !FREE_CHAPTERS.includes(chapterNumber)) {
+    redirect(`/abonnement?chapter=${chapterNumber}&redirect=${encodeURIComponent(currentPath)}`);
+  }
+
   if (!scene) {
     notFound();
   }
