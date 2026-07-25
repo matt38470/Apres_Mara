@@ -29,13 +29,18 @@ export default function LayoutClientHUD({
     resetGame,
   } = useGameStore();
 
-  // Restaure la progression depuis Supabase au montage
   useRestoreProgress();
 
   const [isDeskOpen, setIsDeskOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
+
+  // Dérive le numéro de chapitre depuis currentUnitId (ex: "3.3.9" → 3)
+  const currentChapterNumber = useMemo(() => {
+    const parsed = parseInt(currentUnitId?.split(".")[0] ?? "1", 10);
+    return Number.isNaN(parsed) ? 1 : parsed;
+  }, [currentUnitId]);
 
   const readingFontClass =
     settings.fontFamily === "serif"
@@ -48,6 +53,18 @@ export default function LayoutClientHUD({
     return getMentalStateConfig(mentalState);
   }, [mentalState]);
 
+  // Couleur du statut psychologique selon l'état
+  const mentalStatusColor = useMemo(() => {
+    switch (mentalState) {
+      case "lucide": return "text-green-600 dark:text-green-400";
+      case "stable": return "text-sky-600 dark:text-sky-400";
+      case "tourmente": return "text-amber-600 dark:text-amber-400";
+      case "visionnaire": return "text-purple-600 dark:text-purple-400";
+      case "fracture": return "text-red-600 dark:text-red-400";
+      default: return "text-neutral-500";
+    }
+  }, [mentalState]);
+
   if (!mounted) {
     return <div className="min-h-screen bg-background" />;
   }
@@ -58,20 +75,19 @@ export default function LayoutClientHUD({
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 md:px-6">
           <div className="min-w-0">
             <div className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#9e2a2b] dark:text-[#dc2f02]">
-              Dossier Vance
+              Après Mara
             </div>
             <div className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-              Lecture en cours · Chapitre 1
+              Lecture en cours · Chapitre {currentChapterNumber}
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Lien bibliothèque */}
             <Link
               href="/library"
               className="rounded-full border border-black/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-neutral-600 transition hover:border-amber-400/40 hover:text-amber-600 dark:border-white/10 dark:text-neutral-300 dark:hover:text-amber-300"
             >
-              Bibliothèque
+              Mon enquête
             </Link>
 
             <button
@@ -89,24 +105,7 @@ export default function LayoutClientHUD({
 
       <div className="mx-auto flex w-full max-w-5xl gap-10 px-4 pb-16 pt-28 md:px-6">
         <main className="min-w-0 flex-1">
-          <div className="mb-6 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-500">
-            <span className="rounded-full border border-black/10 px-3 py-1 dark:border-white/10">
-              San Telmo
-            </span>
-            <span className="rounded-full border border-black/10 px-3 py-1 dark:border-white/10">
-              Polar Interactif
-            </span>
-          </div>
-
-          <article
-            className={`max-w-2xl ${readingFontClass}`}
-            style={{
-              fontSize: `${settings.fontSize}px`,
-              lineHeight: 1.9,
-            }}
-          >
-            {children}
-          </article>
+          {children}
         </main>
 
         <aside className="hidden w-56 shrink-0 xl:block">
@@ -143,7 +142,7 @@ export default function LayoutClientHUD({
             <div className="rounded-2xl border border-black/10 bg-white/70 p-4 text-sm leading-relaxed text-neutral-600 shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:text-neutral-400">
               <div className="mb-2 flex justify-between text-[10px] font-bold uppercase tracking-[0.24em] text-neutral-500">
                 <span>Psychologie</span>
-                <span className="text-green-700 dark:text-green-500">{currentMentalConfig.statusLabel}</span>
+                <span className={mentalStatusColor}>{currentMentalConfig.statusLabel}</span>
               </div>
               {currentMentalConfig.quickNote}
             </div>

@@ -109,7 +109,7 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-amber-500 dark:text-amber-400">
-              {scene.location ?? "Incident NW-7"}
+              {scene.location ?? "San Telmo"}
             </p>
             <h1 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
               {scene.title}
@@ -122,7 +122,13 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
           )}
         </div>
 
-        <div className="mb-12 space-y-6 text-neutral-800 dark:text-neutral-200">
+        <div
+          className="mb-12 space-y-6 text-neutral-800 dark:text-neutral-200"
+          style={{
+            fontSize: `${settings.fontSize}px`,
+            lineHeight: 1.9,
+          }}
+        >
           {scene.textBlocks.map((block, idx) => (
             <div key={idx} dangerouslySetInnerHTML={{ __html: block }} />
           ))}
@@ -146,13 +152,11 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
 
                   const nextUrl = resolveNextUnitUrl(choice.nextUnitId);
 
-                  // Si la scène est déjà résolue (retour en arrière), navigation directe
                   if (sceneAlreadyResolved) {
                     if (alreadyChosen) router.push(nextUrl);
                     return;
                   }
 
-                  // Appliquer le choix dans le store
                   applyChoice(choice.effects, choice.unlockArchive, choice.id);
                   setChosenPath(scene.id, choice.id);
 
@@ -186,7 +190,6 @@ export default function SceneReaderClient({ scene }: { scene: NarrativeUnit }) {
                   const nextChapter = parseInt(choice.nextUnitId.split(".")[0], 10);
                   const nextUnit = choice.nextUnitId;
 
-                  // Navigation immédiate — saveProgress en fire-and-forget
                   router.push(nextUrl);
                   void saveProgress(nextChapter, nextUnit);
                 }}
