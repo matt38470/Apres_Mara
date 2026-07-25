@@ -40,9 +40,9 @@ export default function CoverPage() {
           transition={{ duration: 1, ease: "easeOut", delay: 0.15 }}
           className="mb-10 text-6xl font-bold leading-none tracking-tight text-white md:text-8xl"
         >
-          Le Cartel
+          Après
           <br />
-          <span className="text-amber-400">des Âmes</span>
+          <span className="text-amber-400">Mara</span>
         </motion.h1>
 
         {/* Accroche */}
@@ -53,21 +53,21 @@ export default function CoverPage() {
           className="mb-12 max-w-xl space-y-5"
         >
           <p className="text-lg font-light leading-relaxed text-neutral-300">
-            San Telmo, quelque part dans un futur proche. Mourir n'est plus
-            le pire qui puisse vous arriver — c'est devenir{" "}
-            <span className="font-semibold text-white">remplaçable</span>.
+            San Telmo, futur proche. Les consciences s'arrachent, se fractionnent,
+            se vendent. Mourir n'est plus une fin —{" "}
+            <span className="font-semibold text-white">c'est devenir une matière première</span>.
           </p>
 
           <p className="text-lg font-light leading-relaxed text-neutral-300">
-            Votre conjoint(e) est en stase. Le cartel attend son dû.
-            Une enquête sur un vol de corps dans les bas-fonds de la ville
-            va vous révéler que certaines âmes s'arrachent encore vivantes —
-            et que quelqu'un que vous aimez en sait beaucoup trop.
+            Victor Vance enquête pour le Cartel. Une nuit au bord des quais,
+            une voix d'enfant sort d'une gorge d'adulte — et un bracelet rouge
+            dans sa poche lui rappelle qu'il a déjà enterré quelqu'un
+            qui n'aurait peut-être pas dû l'être.
           </p>
 
           <p className="text-lg font-light italic leading-relaxed text-neutral-400">
-            Corruption, dette, loyauté. Jusqu'où irez-vous
-            pour garder les vôtres en vie ?
+            Sa fille a disparu. Certaines traces refusent de mourir.
+            Jusqu'où irez-vous pour savoir ce qu'il reste d'elle ?
           </p>
         </motion.div>
 
@@ -99,7 +99,7 @@ export default function CoverPage() {
           transition={{ duration: 0.6, delay: 1.1 }}
           className="mt-8 text-xs font-medium tracking-widest text-neutral-500 uppercase"
         >
-          3 chapitres gratuits &nbsp;·&nbsp; Chapitres 4–10 sur abonnement
+          3 chapitres gratuits &nbsp;·&nbsp; Prérelease — soutenez la suite
         </motion.p>
 
       </main>
