@@ -13,7 +13,7 @@ const JAUGES = [
     barre: "bg-red-400",
     exemple: 80,
     description:
-      "Le Cartel tient les comptes. Chaque faveur refusée, chaque délai alourdit la balance. Quand la dette déborde, vos proches en paient le prix — pas vous.",
+      "Chaque faveur acceptée, chaque délai dépassé alourdit la balance. Quand elle déborde, les conséquences ne se limitent pas à vous.",
   },
   {
     nom: "Ancrage",
@@ -22,7 +22,7 @@ const JAUGES = [
     barre: "bg-violet-400",
     exemple: 100,
     description:
-      "Mara est quelque part. C'est ce qui vous maintient debout — et ce qui vous rend vulnérable. Plus l'Ancrage faiblit, moins vous distinguez l'enquête du deuil.",
+      "Ce qui vous maintient debout. Plus il faiblit, moins vous distinguez l'enquête de l'obsession.",
   },
   {
     nom: "Humanité",
@@ -31,7 +31,7 @@ const JAUGES = [
     barre: "bg-amber-400",
     exemple: 50,
     description:
-      "Ce qu'il vous reste d'empathie, de principes, de dégoût face à la corruption. Vance peut survivre sans. Mais l'état psychologique affiché à l'écran ne mentira pas.",
+      "Ce qu'il vous reste d'empathie, de principes, de dégoût face à la corruption. L'état psychologique affiché à l'écran ne mentira pas.",
   },
 ];
 
@@ -119,8 +119,7 @@ export default function ReglesPage() {
           <p className="text-sm font-light leading-relaxed text-neutral-400">
             Un label dérivé de la combinaison de vos trois jauges s'affiche en permanence
             sous vos statistiques. <span className="italic text-neutral-300">Impassible. Fragile. Cynique. À bout.</span>{" "}
-            Il ne juge pas — il constate. C'est souvent la seule chose honnête que Vance
-            se dise à lui-même.
+            Il ne juge pas — il constate.
           </p>
         </motion.div>
 

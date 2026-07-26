@@ -38,7 +38,7 @@ const ARCHIVES_DB: Record<
     image: "None",
     details: [
       "Penthouse au-dessus des nuages. Caisson de transfert profané, liquide de stase répandu.",
-      "Qui a accès à leur appartement — et pourquoi maintenant ?",
+      "Qui a accès à leur appartement — et pourquoi maintenant ?",
     ],
   },
 };
@@ -61,12 +61,12 @@ const CHARACTER_DB = [
   },
   {
     id: "conjoint",
-    name: "[Conjoint(e)]",
-    role: "En stase — Clinique du Cartel",
-    status: "Stable (pour l'instant)",
+    name: "?",
+    role: "Identité inconnue",
+    status: "Statut inconnu",
     image: "None",
-    relation: "Votre ancrage. La raison pour laquelle vous acceptez des missions que vous devriez refuser.",
-    details: "Nom à définir selon le parcours. La dette court.",
+    relation: "Quelqu'un que vous cherchez.",
+    details: "Les détails se révèlent au fil de l'enquête.",
   },
 ];
 
@@ -200,7 +200,7 @@ export default function ArchivesModal({
                       Dossier Vance
                     </h2>
                     <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                      San Telmo &middot; Statut : {systemStatus}
+                      San Telmo &middot; Statut : {systemStatus}
                     </p>
                   </div>
 
@@ -304,7 +304,7 @@ export default function ArchivesModal({
                           Progression
                         </div>
                         <div className="mt-2 text-sm text-neutral-700 dark:text-neutral-300">
-                          Unité actuelle :{" "}
+                          Unité actuelle :{" "}
                           <span className="font-semibold text-neutral-950 dark:text-white">
                             {currentUnitId}
                           </span>

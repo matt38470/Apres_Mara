@@ -174,10 +174,11 @@ export default function LibraryPage() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const { isPremium, loading: premiumLoading } = useIsPremium();
+  // isPremium avec valeur optimiste : on affiche la page immédiatement,
+  // les chapitres premium se déverrouillent en arrière-plan si besoin.
+  const { isPremium } = useIsPremium();
   const chapters = useChapterStatuses(isPremium);
 
-  // Empêche le flash SSR : on n'affiche rien tant que le client n'est pas monté
   if (!mounted) {
     return <div className="min-h-screen bg-[#f7f5f0] dark:bg-[#0c0d10]" />;
   }
@@ -238,93 +239,82 @@ export default function LibraryPage() {
           </Link>
         </div>
 
-        {premiumLoading ? (
-          <div className="space-y-3">
-            {[...Array(10)].map((_, i) => (
-              <div
-                key={i}
-                className="h-20 animate-pulse rounded-2xl border border-black/10 bg-white/70 dark:border-white/10 dark:bg-white/[0.03]"
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {chapters.map((ch, i) => {
-              const cfg = STATUS_CONFIG[ch.status];
-              const isSeqLocked = ch.status === "locked";
-              const isPremLocked = ch.status === "locked-premium";
+        <div className="space-y-3">
+          {chapters.map((ch, i) => {
+            const cfg = STATUS_CONFIG[ch.status];
+            const isSeqLocked = ch.status === "locked";
+            const isPremLocked = ch.status === "locked-premium";
 
-              return (
-                <motion.article
-                  key={ch.number}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.04, duration: 0.28 }}
-                  className={`flex items-center gap-4 rounded-2xl border p-4 transition ${
+            return (
+              <motion.article
+                key={ch.number}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.025, duration: 0.22 }}
+                className={`flex items-center gap-4 rounded-2xl border p-4 transition ${
+                  isSeqLocked
+                    ? "border-black/[0.06] bg-white/30 opacity-50 dark:border-white/[0.06] dark:bg-white/[0.01]"
+                    : "border-black/10 bg-white/70 hover:border-amber-500/20 hover:shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-amber-500/20"
+                }`}
+              >
+                <div
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums ${
                     isSeqLocked
-                      ? "border-black/[0.06] bg-white/30 opacity-50 dark:border-white/[0.06] dark:bg-white/[0.01]"
-                      : "border-black/10 bg-white/70 hover:border-amber-500/20 hover:shadow-sm dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-amber-500/20"
+                      ? "bg-neutral-200/60 text-neutral-400 dark:bg-white/[0.04] dark:text-neutral-600"
+                      : ch.status === "done"
+                      ? "bg-green-500/15 text-green-700 dark:text-green-400"
+                      : isPremLocked
+                      ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                      : "bg-amber-500/15 text-amber-700 dark:text-amber-400"
                   }`}
                 >
-                  <div
-                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums ${
-                      isSeqLocked
-                        ? "bg-neutral-200/60 text-neutral-400 dark:bg-white/[0.04] dark:text-neutral-600"
-                        : ch.status === "done"
-                        ? "bg-green-500/15 text-green-700 dark:text-green-400"
-                        : isPremLocked
-                        ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                        : "bg-amber-500/15 text-amber-700 dark:text-amber-400"
-                    }`}
-                  >
-                    {ch.number}
-                  </div>
+                  {ch.number}
+                </div>
 
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-semibold text-neutral-950 dark:text-white">
-                        {ch.title}
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-semibold text-neutral-950 dark:text-white">
+                      {ch.title}
+                    </span>
+                    {cfg.badge && (
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] ${cfg.badgeClass}`}
+                      >
+                        {cfg.badge}
                       </span>
-                      {cfg.badge && (
-                        <span
-                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] ${cfg.badgeClass}`}
-                        >
-                          {cfg.badge}
-                        </span>
-                      )}
-                    </div>
-                    <p className="mt-0.5 text-[11px] uppercase tracking-[0.14em] text-neutral-500">
-                      {ch.subtitle}
-                    </p>
-                    {!isSeqLocked && !isPremLocked && (
-                      <p className="mt-1.5 line-clamp-1 text-sm text-neutral-600 dark:text-neutral-400">
-                        {ch.teaser}
-                      </p>
-                    )}
-                    {isPremLocked && (
-                      <p className="mt-1.5 text-sm italic text-neutral-400 dark:text-neutral-500">
-                        Disponible en prérelease
-                      </p>
                     )}
                   </div>
+                  <p className="mt-0.5 text-[11px] uppercase tracking-[0.14em] text-neutral-500">
+                    {ch.subtitle}
+                  </p>
+                  {!isSeqLocked && !isPremLocked && (
+                    <p className="mt-1.5 line-clamp-1 text-sm text-neutral-600 dark:text-neutral-400">
+                      {ch.teaser}
+                    </p>
+                  )}
+                  {isPremLocked && (
+                    <p className="mt-1.5 text-sm italic text-neutral-400 dark:text-neutral-500">
+                      Disponible en prérelease
+                    </p>
+                  )}
+                </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handleChapterAction(ch)}
-                    disabled={cfg.disabled}
-                    className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition ${cfg.btnClass}`}
-                  >
-                    {cfg.btnLabel}
-                  </button>
-                </motion.article>
-              );
-            })}
-          </div>
-        )}
+                <button
+                  type="button"
+                  onClick={() => handleChapterAction(ch)}
+                  disabled={cfg.disabled}
+                  className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition ${cfg.btnClass}`}
+                >
+                  {cfg.btnLabel}
+                </button>
+              </motion.article>
+            );
+          })}
+        </div>
       </main>
 
       <footer className="mx-auto max-w-3xl px-5 pb-16 pt-6 md:px-6">
-        {!isPremium && !premiumLoading && (
+        {!isPremium && (
           <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-transparent p-6 text-center dark:border-amber-500/15">
             <div className="text-[10px] font-bold uppercase tracking-[0.28em] text-amber-600 dark:text-amber-400">
               Prérelease

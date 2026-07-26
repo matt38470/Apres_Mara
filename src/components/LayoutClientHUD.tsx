@@ -36,7 +36,6 @@ export default function LayoutClientHUD({
 
   useEffect(() => setMounted(true), []);
 
-  // Dérive le numéro de chapitre depuis currentUnitId (ex: "3.3.9" → 3)
   const currentChapterNumber = useMemo(() => {
     const parsed = parseInt(currentUnitId?.split(".")[0] ?? "1", 10);
     return Number.isNaN(parsed) ? 1 : parsed;
@@ -53,7 +52,6 @@ export default function LayoutClientHUD({
     return getMentalStateConfig(mentalState);
   }, [mentalState]);
 
-  // Couleur du statut psychologique selon l'état
   const mentalStatusColor = useMemo(() => {
     switch (mentalState) {
       case "lucide": return "text-green-600 dark:text-green-400";
@@ -87,7 +85,7 @@ export default function LayoutClientHUD({
               href="/library"
               className="rounded-full border border-black/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-neutral-600 transition hover:border-amber-400/40 hover:text-amber-600 dark:border-white/10 dark:text-neutral-300 dark:hover:text-amber-300"
             >
-              Mon enquête
+              Sommaire
             </Link>
 
             <button
@@ -120,21 +118,21 @@ export default function LayoutClientHUD({
                   label="Dette"
                   value={gauges.dette}
                   colorTheme="red"
-                  description="La pression financière du Cartel."
+                  description="Pression accumulée. Quand elle déborde, les conséquences s'étendent."
                 />
                 <Gauge
                   idKey="ancrage"
                   label="Ancrage"
                   value={gauges.ancrage}
                   colorTheme="green"
-                  description="Santé mentale et lucidité."
+                  description="Ce qui vous maintient lucide. Faible = obsession."
                 />
                 <Gauge
                   idKey="humanite"
                   label="Humanité"
                   value={gauges.humanite}
                   colorTheme="orange"
-                  description="Cynisme (faible) vs Empathie (élevée)."
+                  description="Cynisme (faible) vs empathie (élevée)."
                 />
               </div>
             </div>
